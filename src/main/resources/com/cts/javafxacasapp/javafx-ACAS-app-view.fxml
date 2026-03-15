@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<StackPane prefHeight="720" prefWidth="1280" style="-fx-background-color: #0d1520;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cts.javafxacasapp.LoginController">
+
+    <HBox alignment="CENTER" spacing="80" style="-fx-padding: 60 100 60 100;">
+
+        <!-- ===== LEFT SIDE ===== -->
+        <VBox alignment="TOP_LEFT" spacing="24" HBox.hgrow="ALWAYS">
+
+            <!-- Title Block -->
+            <VBox spacing="0">
+            <ImageView fitHeight="200.0" fitWidth="200.0">
+               <image>
+                  <Image url="@../../../../../../target/classes/img/ACAS.png" />
+               </image>
+            </ImageView>
+                <Label style="-fx-font-family: 'Arial Black'; -fx-font-size: 48px; -fx-font-weight: 900; -fx-text-fill: #ffffff; -fx-font-style: italic;" text="AUTOMOTIVE" />
+                <!-- COMPONENT: outline only using -fx-text-fill transparent + stroke -->
+                <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 48px; -fx-font-weight: 900; -fx-font-style: italic;                              -fx-fill: transparent; -fx-stroke: #cc2200; -fx-stroke-width: 1.5;" text="COMPONENT" />
+                <Label style="-fx-font-family: 'Arial Black'; -fx-font-size: 48px; -fx-font-weight: 900; -fx-text-fill: #ffffff; -fx-font-style: italic;" text="ADVISORY" />
+                <!-- SYSTEM: outline only -->
+                <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 48px; -fx-font-weight: 900; -fx-font-style: italic;                              -fx-fill: transparent; -fx-stroke: #cc2200; -fx-stroke-width: 1.5;" text="SYSTEM" />
+            </VBox>
+
+            <!-- Subtitle -->
+            <Label maxWidth="420" style="-fx-font-family: Arial; -fx-font-size: 14px; -fx-text-fill: #a0a8b8;" text="A system for precise automotive part&#10;recommendations based on diagnostic codes and&#10;vehicle compatibility." wrapText="true" />
+
+        </VBox>
+
+        <!-- ===== RIGHT SIDE: Access Portal Card ===== -->
+        <VBox maxWidth="400" prefWidth="380" style="-fx-background-color: #121823;                      -fx-border-color: rgba(255,255,255,0.08);                      -fx-border-width: 1;                      -fx-border-radius: 16;                      -fx-background-radius: 16;                      -fx-padding: 36 32 32 32;">
+
+            <fx:define>
+                <ToggleGroup fx:id="roleToggleGroup" />
+            </fx:define>
+
+            <!-- Card Header -->
+            <VBox spacing="4" style="-fx-padding: 0 0 24 0;">
+                <Label style="-fx-font-family: 'Arial Black'; -fx-font-size: 22px; -fx-font-weight: 900; -fx-text-fill: #ffffff;" text="ACCESS PORTAL" />
+                <Label style="-fx-font-family: Arial; -fx-font-size: 13px; -fx-text-fill: #6b7891;" text="Enter your credentials" />
+            </VBox>
+
+            <!-- Username Field -->
+            <VBox spacing="6" style="-fx-padding: 0 0 16 0;">
+                <Label style="-fx-font-family: Arial; -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #6b7891;" text="USERNAME" />
+                <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #1a2235; -fx-border-color: #2a3650; -fx-border-width: 1;                              -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12 0 12; -fx-min-height: 48px;">
+                    <Label style="-fx-font-size: 14px; -fx-text-fill: #6b7891;" text="👤" />
+                    <TextField fx:id="usernameField" promptText="Enter username" style="-fx-background-color: transparent; -fx-border-color: transparent;                                       -fx-text-fill: #e8ecf4; -fx-font-size: 14px; -fx-prompt-text-fill: #3d4d68;" HBox.hgrow="ALWAYS" />
+                </HBox>
+            </VBox>
+
+            <!-- Password Field -->
+            <VBox spacing="6" style="-fx-padding: 0 0 16 0;">
+                <Label style="-fx-font-family: Arial; -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #6b7891;" text="PASSWORD" />
+                <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #1a2235; -fx-border-color: #2a3650; -fx-border-width: 1;                              -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12 0 12; -fx-min-height: 48px;">
+                    <Label style="-fx-font-size: 14px; -fx-text-fill: #6b7891;" text="🔒" />
+                    <PasswordField fx:id="passwordField" promptText="••••••••••••" style="-fx-background-color: transparent; -fx-border-color: transparent;                                           -fx-text-fill: #e8ecf4; -fx-font-size: 14px; -fx-prompt-text-fill: #3d4d68;" HBox.hgrow="ALWAYS" />
+                </HBox>
+            </VBox>
+
+            <!-- Role Selector -->
+            <VBox spacing="8" style="-fx-padding: 0 0 16 0;">
+                <Label style="-fx-font-family: Arial; -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #6b7891;" text="ROLE" />
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <ToggleButton fx:id="mechanicBtn" prefHeight="60" prefWidth="110" text="Mechanic">
+                  <toggleGroup>
+                     <ToggleGroup />
+                  </toggleGroup></ToggleButton>
+                    <ToggleButton fx:id="adminBtn" prefHeight="60" prefWidth="110" selected="true" text="Admin">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="roleToggleGroup" />
+                  </toggleGroup></ToggleButton>
+                    <ToggleButton fx:id="guestBtn" prefHeight="60" prefWidth="110" text="Guest" toggleGroup="$roleToggleGroup" />
+                </HBox>
+            </VBox>
+
+            <!-- Error Label -->
+            <Label fx:id="errorLabel" style="-fx-text-fill: #ff4444; -fx-font-size: 12px; -fx-padding: 4 0 8 0;" text="" visible="false" wrapText="true" />
+
+            <!-- Buttons -->
+            <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 16 0 0 0;">
+                <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="48" prefWidth="220" style="-fx-background-color: linear-gradient(to right, #cc2200, #ff3300);                                -fx-text-fill: #ffffff; -fx-font-family: 'Arial Black';                                -fx-font-size: 14px; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;" text="LOGIN" />
+                <Button fx:id="registerButton" onAction="#handleRegister" prefHeight="48" prefWidth="130" style="-fx-background-color: transparent; -fx-border-color: #3a4a65;                                -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8;                                -fx-text-fill: #a0a8b8; -fx-font-family: 'Arial Black';                                -fx-font-size: 13px; -fx-cursor: hand;" text="REGISTER" />
+            </HBox>
+
+        </VBox>
+
+    </HBox>
+
+</StackPane>

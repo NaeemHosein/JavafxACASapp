@@ -1,0 +1,226 @@
+/* ============================================================
+   ACAS Login UI - JavaFX CSS Stylesheet
+   ============================================================ */
+
+/* ── Root / Background ───────────────────────────────────── */
+.background-pane {
+    -fx-background-color: linear-gradient(to bottom right, #0a0e14, #0d1520, #0a0e14);
+    -fx-min-width: 1280px;
+    -fx-min-height: 720px;
+}
+
+.main-container {
+    -fx-padding: 60 100 60 100;
+}
+
+/* ── Left Panel ──────────────────────────────────────────── */
+.left-panel {
+    -fx-padding: 0;
+}
+
+/* Logo Box */
+.logo-box {
+    -fx-background-color: #1a1a1a;
+    -fx-border-color: #cc2200;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8;
+    -fx-effect: dropshadow(gaussian, rgba(204,34,0,0.4), 12, 0, 0, 0);
+}
+
+/* Title Typography */
+.title-block {
+    -fx-spacing: 0;
+}
+
+.title-white {
+    -fx-font-family: "Arial Black";
+    -fx-font-size: 52px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
+    -fx-font-style: italic;
+}
+
+.title-red {
+    -fx-font-family: "Arial Black";
+    -fx-font-size: 52px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #cc2200;
+    -fx-font-style: italic;
+    -fx-effect: dropshadow(gaussian, rgba(204,34,0,0.5), 8, 0, 0, 0);
+}
+
+.subtitle-text {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-text-fill: #a0a8b8;
+    -fx-line-spacing: 4;
+}
+
+/* ── Right Panel: Portal Card ────────────────────────────── */
+.portal-card {
+    -fx-background-color: rgba(18, 24, 35, 0.92);
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+    -fx-padding: 36 32 32 32;
+    -fx-spacing: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 30, 0, 0, 8);
+}
+
+.card-header {
+    -fx-padding: 0 0 24 0;
+}
+
+.portal-title {
+    -fx-font-family: "Arial Black";
+    -fx-font-size: 22px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
+    -fx-letter-spacing: 2;
+}
+
+.portal-subtitle {
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-text-fill: #6b7891;
+}
+
+/* ── Form Fields ─────────────────────────────────────────── */
+.field-group {
+    -fx-padding: 0 0 16 0;
+}
+
+.field-label {
+    -fx-font-family: "Arial";
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6b7891;
+    -fx-letter-spacing: 1.5;
+}
+
+.input-wrapper {
+    -fx-background-color: #1a2235;
+    -fx-border-color: #2a3650;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 0 12 0 12;
+    -fx-min-height: 48px;
+    -fx-max-width: Infinity;
+}
+
+.input-wrapper:focused-within {
+    -fx-border-color: #cc2200;
+}
+
+.input-icon {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6b7891;
+    -fx-min-width: 20px;
+}
+
+.input-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #e8ecf4;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #3d4d68;
+    -fx-padding: 0;
+}
+
+.input-field:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-highlight-fill: rgba(204,34,0,0.3);
+}
+
+/* ── Role Toggle Buttons ─────────────────────────────────── */
+.role-btn {
+    -fx-background-color: #1a2235;
+    -fx-border-color: #2a3650;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #a0a8b8;
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.role-btn:hover {
+    -fx-background-color: #1e2a40;
+    -fx-border-color: #cc2200;
+    -fx-text-fill: #ffffff;
+}
+
+.role-btn:selected {
+    -fx-background-color: transparent;
+    -fx-border-color: #cc2200;
+    -fx-border-width: 2;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(204,34,0,0.3), 8, 0, 0, 0);
+}
+
+/* ── Action Buttons ──────────────────────────────────────── */
+.button-row {
+    -fx-padding: 16 0 0 0;
+}
+
+.btn-login {
+    -fx-background-color: linear-gradient(to right, #cc2200, #ff3300);
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Arial Black";
+    -fx-font-size: 14px;
+    -fx-font-weight: 900;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-letter-spacing: 2;
+    -fx-effect: dropshadow(gaussian, rgba(204,34,0,0.5), 12, 0, 0, 4);
+}
+
+.btn-login:hover {
+    -fx-background-color: linear-gradient(to right, #dd2200, #ff4411);
+    -fx-effect: dropshadow(gaussian, rgba(255,51,0,0.7), 18, 0, 0, 6);
+}
+
+.btn-login:pressed {
+    -fx-background-color: linear-gradient(to right, #aa1800, #cc2200);
+    -fx-effect: dropshadow(gaussian, rgba(204,34,0,0.3), 6, 0, 0, 2);
+}
+
+.btn-register {
+    -fx-background-color: transparent;
+    -fx-border-color: #3a4a65;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #a0a8b8;
+    -fx-font-family: "Arial Black";
+    -fx-font-size: 13px;
+    -fx-font-weight: 900;
+    -fx-cursor: hand;
+    -fx-letter-spacing: 1.5;
+}
+
+.btn-register:hover {
+    -fx-border-color: #cc2200;
+    -fx-text-fill: #ffffff;
+}
+
+.btn-register:pressed {
+    -fx-background-color: rgba(204,34,0,0.1);
+}
+
+/* ── Error Label ─────────────────────────────────────────── */
+.error-label {
+    -fx-text-fill: #ff4444;
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+    -fx-padding: 4 0 8 0;
+}
