@@ -24,7 +24,7 @@
             <VBox spacing="0">
             <ImageView fitHeight="200.0" fitWidth="200.0">
                <image>
-                  <Image url="@../../../../../../target/classes/img/ACAS.png" />
+                  <Image url="@../../../img/ACAS.png" />
                </image>
             </ImageView>
                 <Label style="-fx-font-family: 'Arial Black'; -fx-font-size: 48px; -fx-font-weight: 900; -fx-text-fill: #ffffff; -fx-font-style: italic;" text="AUTOMOTIVE" />
@@ -77,12 +77,9 @@
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <ToggleButton fx:id="mechanicBtn" prefHeight="60" prefWidth="110" text="Mechanic">
                   <toggleGroup>
-                     <ToggleGroup />
-                  </toggleGroup></ToggleButton>
-                    <ToggleButton fx:id="adminBtn" prefHeight="60" prefWidth="110" selected="true" text="Admin">
-                  <toggleGroup>
                      <ToggleGroup fx:id="roleToggleGroup" />
                   </toggleGroup></ToggleButton>
+                    <ToggleButton fx:id="adminBtn" prefHeight="60" prefWidth="110" selected="true" text="Admin" toggleGroup="$roleToggleGroup" />
                     <ToggleButton fx:id="guestBtn" prefHeight="60" prefWidth="110" text="Guest" toggleGroup="$roleToggleGroup" />
                 </HBox>
             </VBox>

@@ -83,16 +83,15 @@ public class LoginController {
                 hideError();
                 System.out.println("Login successful: " + username + " | Role: " + role);
 
-                JavafxACASapp app = JavafxACASapp.getInstance();
                 switch (role) {
                     case "Admin":
-                        app.changeScene("admin-dashboard-view.fxml", 1100, 750);
+                        JavafxACASapp.changeScene("admin-dashboard-view.fxml", 1100, 750);
                         break;
                     case "Mechanic":
-                        app.changeScene("mechanic-dashboard-view.fxml", 1100, 750);
+                        JavafxACASapp.changeScene("javafx-ACAS-app-dash.fxml", 1100, 750);
                         break;
                     case "Guest":
-                        app.changeScene("owner-verification-view.fxml", 1100, 750);
+                        JavafxACASapp.changeScene("owner-verification-view.fxml", 1100, 750);
                         break;
                 }
             } else {
@@ -110,8 +109,12 @@ public class LoginController {
 
     @FXML
     private void handleRegister() {
-        System.out.println("Navigate to Register screen");
-        // TODO: navigate to register screen when ready
+        try {
+            JavafxACASapp.changeScene("javafx-ACAS-app-register.fxml", 1100, 750);
+        } catch (IOException e) {
+            showError("Failed to load registration screen.");
+            e.printStackTrace();
+        }
     }
 
     private String getSelectedRole() {

@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 
 //connection to the MySQL Database
 public class DatabaseConnection  {
+    public PreparedStatement pst;
+    public Connection conn;
 
     /*
      * Create a Connection object to the Database
