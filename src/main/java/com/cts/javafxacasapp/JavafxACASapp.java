@@ -45,26 +45,27 @@ public class JavafxACASapp extends Application {
 
         primaryStage.show();
 
-        try {
-            // Test database connection by reading users
-            String query = "SELECT * FROM tblusers";
-            dc.rst = dc.stat.executeQuery(query);
-
-            System.out.println("=== Database Connection Successful ===");
-            System.out.println("Users in database:");
-            while(dc.rst.next()) {
-                System.out.print("ID: " + dc.rst.getInt("user_id"));
-                System.out.print(" | Username: " + dc.rst.getString("username"));
-                System.out.print(" | Role: " + dc.rst.getString("role"));
-                System.out.println();
-            }
-            System.out.println("=====================================");
-        } catch (SQLException e) {
-            // Log the exception using the Java logger
-            logger.severe("An error occurred: Database connectivity failed");
-            logger.severe(e.toString());
-            System.exit(0);
-        }
+        // will return to this after inserting relevant data into tables!!
+//        try {
+//            // Test database connection by reading all users
+//            String query = "SELECT * FROM tblmechanic";
+//            dc.rst = dc.stat.executeQuery(query);
+//
+//            System.out.println("=== Database Connection Successful ===");
+//            System.out.println("Users in database:");
+//            while(dc.rst.next()) {
+//                System.out.print("ID: " + dc.rst.getInt("user_id"));
+//                System.out.print(" | Username: " + dc.rst.getString("username"));
+//                System.out.print(" | Role: " + dc.rst.getString("role"));
+//                System.out.println();
+//            }
+//            System.out.println("=====================================");
+//        } catch (SQLException e) {
+//            // Log the exception using the Java logger
+//            logger.severe("An error occurred: Database connectivity failed");
+//            logger.severe(e.toString());
+//            System.exit(0);
+//        }
     }
 
     public static void changeScene(String fxml, Integer sWidth, Integer sHeight) throws IOException {

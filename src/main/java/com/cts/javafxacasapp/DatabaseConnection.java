@@ -8,9 +8,7 @@ package com.cts.javafxacasapp;
  * Provides the API for accessing and processing data stored in a
  * data source.
 
- * @Author (author)
- * @Version (a version number or a date)
- * @Date (date)
+ *Added Initialize Tables feature to create tables with the app
  */
 
 import java.sql.*;
@@ -64,7 +62,7 @@ public class DatabaseConnection  {
 
 
     DatabaseConnection() {
-        createConnection();
+        createConnection(); initializeDatabase();
     }
 
     //--------------------------------------------------------------------------
@@ -95,4 +93,100 @@ public class DatabaseConnection  {
             System.exit(0);
         }
     }
+
+    // attempting to create tables for database automatically upon startup
+        public void initializeDatabase() {
+                try {
+                    Statement sql = con.createStatement();
+
+                    // building admin table
+                    sql.executeUpdate("""
+                            CREATE TABLE IF NOT EXISTS tbladministrator (
+                                admin_id INT AUTO_INCREMENT PRIMARY KEY,
+                                full_name VARCHAR(50) NOT NULL,
+                                username VARCHAR(50) NOT NULL UNIQUE,
+                                password VARCHAR(20) NOT NULL
+                            )
+                            """);
+                    // building vehicle table
+                    sql.executeUpdate(""" 
+                            CREATE TABLE IF NOT EXISTS tblvehicles (
+                            vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
+                            vehicle_make VARCHAR(50) NOT NULL,
+                            vehicle_model VARCHAR(50) NOT NULL,
+                            engine_type VARCHAR(50) NOT NULL,
+                            year INT NOT NULL)
+                            """);
+
+                    // building parts table
+                    sql.executeUpdate("""
+                            CREATE TABLE IF NOT EXISTS tblparts (
+                            part_id INT AUTO_INCREMENT PRIMARY KEY,
+                            part_name VARCHAR(100) NOT NULL,
+                            part_type VARCHAR(50) NOT NULL,
+                            compatible_make VARCHAR(50),
+                            compatible_model VARCHAR(50),
+                            engine_type VARCHAR(50),
+                            year_min INT NOT NULL,
+                            year_max INT NOT NULL)
+                    """);
+
+                    // building dtc table
+                    sql.executeUpdate("""
+                            CREATE TABLE IF NOT EXISTS tbldiagnostic_codes (
+                            code_id INT AUTO_INCREMENT PRIMARY KEY,
+                            code INT NOT NULL,
+                            description TEXT NOT NULL,
+                            resolution TEXT NOT NULL,
+                            faulty_part VARCHAR(50) )
+                    """);
+
+                    // building mechanic table
+                    sql.executeUpdate("""
+                            CREATE TABLE IF NOT EXISTS tblmechanic (
+                            mechanic_id INT AUTO_INCREMENT PRIMARY KEY,
+                            full_name VARCHAR(50) NOT NULL,
+                            username VARCHAR(50) NOT NULL UNIQUE,
+                            password VARCHAR(20) NOT NULL,
+                            email VARCHAR(50) NOT NULL,
+                            business_name VARCHAR(50),
+                            years_experience INT NOT NULL,
+                            phone_number VARCHAR(14) NOT NULL)
+                    """);
+
+                    // building vehicle owner table
+                    sql.executeUpdate("""
+                            CREATE TABLE IF NOT EXISTS tblvehicle_owner (
+                            owner_id INT AUTO_INCREMENT PRIMARY KEY,
+                            vehicle_id INT NOT NULL,
+                            full_name VARCHAR(50) NOT NULL,
+                            username VARCHAR(50) NOT NULL UNIQUE,
+                            password VARCHAR(20) NOT NULL,
+                            FOREIGN KEY (vehicle_id) REFERENCES tblvehicles(vehicle_id)
+                            )
+                            """);
+
+                    // Diagnostic Reports Table
+                    sql.executeUpdate("""
+                            CREATE TABLE IF NOT EXISTS tbldiagnostic_reports (
+                            report_id INT AUTO_INCREMENT PRIMARY KEY,
+                            mechanic_id INT NOT NULL,
+                            code_id INT NOT NULL,
+                            vehicle_id INT NOT NULL,
+                            feedback TEXT,
+                            flag INT NOT NULL,
+                            report_date DATETIME NOT NULL,
+                            FOREIGN KEY (mechanic_id) REFERENCES tblmechanic(mechanic_id),
+                            FOREIGN KEY (code_id) REFERENCES tbldiagnostic_codes(code_id),
+                            FOREIGN KEY (vehicle_id) REFERENCES tblvehicles(vehicle_id)
+                            )
+                    """);
+
+                    logger.info("Database tables created successfully.");
+
+                } catch (SQLException e) {
+                    logger.severe("Error creating tables: " + e.getMessage());
+                }
+            }
 }
+

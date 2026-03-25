@@ -66,6 +66,7 @@ public class LoginController {
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
         String role = getSelectedRole();
+        String table = getTable();
 
         if (username.isEmpty() || password.isEmpty()) {
             showError("Please enter username and password.");
@@ -74,14 +75,14 @@ public class LoginController {
 
         try {
             DatabaseConnection dc = new DatabaseConnection();
-            String query = "SELECT * FROM tblusers WHERE username = '" + username +
-                    "' AND password = '" + password +
-                    "' AND role = '" + role + "'";
+            getSelectedRole();
+            String query = "SELECT * FROM" + table + "WHERE username = '" + username +
+                    "' AND password = '" + password + "'";
             dc.rst = dc.stat.executeQuery(query);
 
             if (dc.rst.next()) {
                 hideError();
-                System.out.println("Login successful: " + username + " | Role: " + role);
+                System.out.println("Login successful: Welcome" + username + " | You are logged in as a " + role);
 
                 switch (role) {
                     case "Admin":
@@ -124,6 +125,16 @@ public class LoginController {
         if (selected == guestBtn)    return "Guest";
         return "Guest";
     }
+
+    private String getTable() {
+        Toggle selected = roleToggleGroup.getSelectedToggle();
+        if (selected == mechanicBtn) return "tblmechanic";
+        if (selected == adminBtn)    return "tbladministrator";
+        if (selected == guestBtn)    return "tblvehicle_owner";
+        return "Guest";
+    }
+
+
 
     private void showError(String message) {
         errorLabel.setText(message);
