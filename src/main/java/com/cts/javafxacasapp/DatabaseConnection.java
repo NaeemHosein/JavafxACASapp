@@ -30,7 +30,7 @@ public class DatabaseConnection  {
      *  4. Subclasses of different packages
      */
 
-    protected Connection con = null;
+    
 
     //--------------------------------------------------------------------------
     /*
@@ -72,35 +72,26 @@ public class DatabaseConnection  {
      */
     public void createConnection() {
         try {
+            String JDBC_URL = "jdbc:mysql://localhost:3306/javafxACASapp";
 
-            /* Returns a database connection from the currently active connection provider */
-            //--------------------------------------------------------------------------
-            //JavaFXProjectDemo is the name of our database
-            String JDBC_URL = "JDBC:mysql://localhost:3306/javafxACASapp";
-            con = DriverManager.getConnection(JDBC_URL, "root", "mysql");
+            conn = DriverManager.getConnection(JDBC_URL, "root", "mysql");
 
-            /*
-             * Creates a Statement object that will generate ResultSet objects with the given
-             * type and concurrency.
-             */
-            stat = con.createStatement();
-            //ps = con.prepareStatement("");
-        }
-        catch(SQLException e) {
-            // Log the exception using the Java logger
-            logger.severe("An error occurred: Database connectivity failed");
-            logger.severe(e.toString());
-            System.exit(0);
+            stat = conn.createStatement();
+
+            System.out.println("Database connected successfully");
+
+        } catch(SQLException e) {
+            logger.severe("Database connectivity failed");
+            e.printStackTrace();
         }
     }
-
     // attempting to create tables for database automatically upon startup
-        public void createTables() {
-                try {
-                    Statement sql = con.createStatement();
+    public void createTables() {
+        try {
+            Statement sql = conn.createStatement();
 
-                    // building admin table
-                    sql.executeUpdate("""
+            // building admin table
+            sql.executeUpdate("""
                             CREATE TABLE IF NOT EXISTS tbladministrator (
                                 admin_id INT AUTO_INCREMENT PRIMARY KEY,
                                 full_name VARCHAR(50) NOT NULL,
@@ -108,8 +99,8 @@ public class DatabaseConnection  {
                                 password VARCHAR(20) NOT NULL
                             )
                             """);
-                    // building vehicle table
-                    sql.executeUpdate(""" 
+            // building vehicle table
+            sql.executeUpdate(""" 
                             CREATE TABLE IF NOT EXISTS tblvehicles (
                             vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
                             vehicle_make VARCHAR(50) NOT NULL,
@@ -118,8 +109,8 @@ public class DatabaseConnection  {
                             year INT NOT NULL)
                             """);
 
-                    // building parts table
-                    sql.executeUpdate("""
+            // building parts table
+            sql.executeUpdate("""
                             CREATE TABLE IF NOT EXISTS tblparts (
                             part_id INT AUTO_INCREMENT PRIMARY KEY,
                             part_name VARCHAR(100) NOT NULL,
@@ -131,8 +122,8 @@ public class DatabaseConnection  {
                             year_max INT NOT NULL)
                     """);
 
-                    // building dtc table
-                    sql.executeUpdate("""
+            // building dtc table
+            sql.executeUpdate("""
                             CREATE TABLE IF NOT EXISTS tbldiagnostic_codes (
                             code_id INT AUTO_INCREMENT PRIMARY KEY,
                             code INT NOT NULL,
@@ -141,8 +132,8 @@ public class DatabaseConnection  {
                             faulty_part VARCHAR(50) )
                     """);
 
-                    // building mechanic table
-                    sql.executeUpdate("""
+            // building mechanic table
+            sql.executeUpdate("""
                             CREATE TABLE IF NOT EXISTS tblmechanic (
                             mechanic_id INT AUTO_INCREMENT PRIMARY KEY,
                             full_name VARCHAR(50) NOT NULL,
@@ -154,8 +145,8 @@ public class DatabaseConnection  {
                             phone_number VARCHAR(14) NOT NULL)
                     """);
 
-                    // building vehicle owner table
-                    sql.executeUpdate("""
+            // building vehicle owner table
+            sql.executeUpdate("""
                             CREATE TABLE IF NOT EXISTS tblvehicle_owner (
                             owner_id INT AUTO_INCREMENT PRIMARY KEY,
                             vehicle_id INT NOT NULL,
@@ -167,8 +158,8 @@ public class DatabaseConnection  {
                             )
                             """);
 
-                    // Diagnostic Reports Table
-                    sql.executeUpdate("""
+            // Diagnostic Reports Table
+            sql.executeUpdate("""
                             CREATE TABLE IF NOT EXISTS tbldiagnostic_reports (
                             report_id INT AUTO_INCREMENT PRIMARY KEY,
                             mechanic_id INT NOT NULL,
@@ -183,18 +174,19 @@ public class DatabaseConnection  {
                             )
                     """);
 
-                    logger.info("Database tables created successfully.");
+            logger.info("Database tables created successfully.");
 
-                } catch (SQLException e) {
-                    logger.severe("Error creating tables: " + e.getMessage());
-                }
-            }
+        } catch (SQLException e) {
+            logger.severe("Error creating tables: " + e.getMessage());
+        }
+    }
 
     public void populateTables() {
 
 
         try {
-            Statement sql = con.createStatement();
+
+            Statement sql = conn.createStatement();
 
             // ensuring that tables are empty (assuming that if one is then all will be)
 
@@ -251,7 +243,7 @@ public class DatabaseConnection  {
         """);
 
 
-             // creating 3 sample vehicle owners/ customers
+            // creating 3 sample vehicle owners/ customers
             sql.executeUpdate("""
             INSERT INTO tblvehicle_owner
             (vehicle_id, full_name, username, password, email) VALUES
@@ -348,13 +340,11 @@ public class DatabaseConnection  {
                     "3 sample vehicle owners successfully inserted." +
                     "20 DTC codes successfully inserted." +
                     "50 vehicle parts successfully inserted."
-                    );
+            );
 
-            } catch (SQLException e) {
-                logger.severe("Error inserting sample data: " + e.getMessage());
-            }
+        } catch (SQLException e) {
+            logger.severe("Error inserting sample data: " + e.getMessage());
         }
-
     }
 
-
+}
