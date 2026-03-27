@@ -1,3 +1,10 @@
+/**
+ * Login page controller - currently just checks to see if a row exists in the
+ * relevant table with inputted username and password.
+ * NEED TO ADD: sessions to store IDs
+ * Update: migrated showError() and hideError() to AppUtils for use in other easy use in all controllers
+ */
+
 package com.cts.javafxacasapp;
 
 import javafx.fxml.FXML;
@@ -57,12 +64,12 @@ public class LoginController {
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showError("Please enter username and password.");
+            AppUtils.showError(errorLabel,"Please enter username and password.");
             return;
         }
         Toggle selectedToggle = roleToggleGroup.getSelectedToggle();
         if (selectedToggle == null) {
-            showError("Please select a role.");
+            AppUtils.showError(errorLabel,"Please select a role.");
             return;
         }
 
@@ -78,7 +85,7 @@ public class LoginController {
             tableName = "tblvehicle_owner";
         }
         else {
-            showError("Invalid role selected.");
+            AppUtils.showError(errorLabel,"Invalid role selected.");
             return;
         }
 
@@ -92,7 +99,7 @@ public class LoginController {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                hideError();
+                AppUtils.hideError(errorLabel);
                 System.out.println("Login successful");
 
                 if (selectedToggle == adminBtn) {
@@ -106,14 +113,14 @@ public class LoginController {
                 }
 
             } else {
-                showError("Invalid username or password.");
+                AppUtils.showError(errorLabel,"Invalid username or password.");
             }
 
         } catch (SQLException e) {
-            showError("Database error. Please try again.");
+            AppUtils.showError(errorLabel,"Database error. Please try again.");
             e.printStackTrace();
         } catch (IOException e) {
-            showError("Failed to load next screen.");
+            AppUtils.showError(errorLabel,"Failed to load next screen.");
             e.printStackTrace();
         }
     }
@@ -123,7 +130,7 @@ public class LoginController {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-mechanic-register.fxml", 1100, 750);
         } catch (IOException e) {
-            showError("Failed to load registration screen.");
+            AppUtils.showError(errorLabel,"Failed to load registration screen.");
             e.printStackTrace();
         }
     }
@@ -133,18 +140,8 @@ public class LoginController {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-customer-register.fxml", 1100, 750);
         } catch (IOException e) {
-            showError("Failed to load registration screen.");
+            AppUtils.showError(errorLabel,"Failed to load registration screen.");
             e.printStackTrace();
         }
-    }
-
-    private void showError(String message) {
-        errorLabel.setText(message);
-        errorLabel.setVisible(true);
-    }
-
-    private void hideError() {
-        errorLabel.setText("");
-        errorLabel.setVisible(false);
     }
 }
