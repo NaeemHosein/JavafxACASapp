@@ -20,8 +20,6 @@ public class JavafxACASapp extends Application {
         return null;
     }
 
-    public static void changeScene(String s, String s1) {
-    }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -91,6 +89,10 @@ public class JavafxACASapp extends Application {
 
             case "javafx-ACAS-app-view.fxml":
                 currentStg.setTitle("ACAS - User Login");
+                break;
+
+            case"javafx-ACAS-app-customer-register.fxml":
+                currentStg.setTitle("ACAS - Customer Registration");
                 break;
         }
 
