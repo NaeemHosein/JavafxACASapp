@@ -1,18 +1,23 @@
+/**
+ * Controller for Mechanic login fxml file.
+ * Registered info is stored in Mechanic Table and
+ * Users are redirected to login page automatically
+ * Added functional back button for navigation and some field validations.
+ * */
+
+
 package com.cts.javafxacasapp;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 
 public class RegisterMechanicController {
 
-    // ===== FIELDS FROM YOUR FXML =====
+
     @FXML private TextField fullNameField;
     @FXML private TextField usernameField;
     @FXML private TextField emailField;
@@ -24,9 +29,9 @@ public class RegisterMechanicController {
 
     @FXML private Label errorLabel;
 
-    // ===== REGISTER BUTTON =====
+    // defining register button - storing data in Mechanics Table
     @FXML
-    private void handleRegister(ActionEvent event) {
+    private void handleRegister(ActionEvent event) throws IOException {
 
         String fullName = fullNameField.getText();
         String username = usernameField.getText();
@@ -36,7 +41,7 @@ public class RegisterMechanicController {
         String phone = phoneField.getText();
         String experience = experienceField.getText();
 
-        // Basic validation
+        // added validation for missing fields
         if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() ||
                 password.isEmpty() || business.isEmpty() ||
                 phone.isEmpty() || experience.isEmpty()) {
@@ -46,64 +51,59 @@ public class RegisterMechanicController {
             return;
         }
 
-        // Optional: validate number
+
+
+        // adding info to mechanic table
         try {
-            Integer.parseInt(experience);
-        } catch (NumberFormatException e) {
-            errorLabel.setText("Experience must be a number.");
-            errorLabel.setVisible(true);
+            DatabaseConnection db = new DatabaseConnection();
+
+            String query = """
+            INSERT INTO tblmechanic
+            (full_name, username, password, email, business_name, years_experience, phone_number)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """;   //
+
+            PreparedStatement mechanic = db.conn.prepareStatement(query);
+
+            mechanic.setString(1, fullName);
+            mechanic.setString(2, username);
+            mechanic.setString(3, password);
+            mechanic.setString(4, email);
+            mechanic.setString(5, business);
+            mechanic.setInt(6, Integer.parseInt(experience));
+            mechanic.setString(7, phone);
+
+            int rowsInserted = mechanic.executeUpdate();
+
+            if (rowsInserted > 0) {
+                System.out.println("Mechanic successfully inserted into database.");
+            }
+
+            mechanic.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AppUtils.showAlert("Error", "Registration Failed! Please ensure that all fields are filled according to the guidelines provided.");
             return;
         }
 
-        // SUCCESS
         errorLabel.setVisible(false);
+        System.out.println("New Mechanic Registered! Redirecting to Login... ");
 
-        System.out.println("=== NEW MECHANIC REGISTERED ===");
-        System.out.println("Name: " + fullName);
-        System.out.println("Username: " + username);
-        System.out.println("Email: " + email);
-        System.out.println("Business: " + business);
-        System.out.println("Phone: " + phone);
-        System.out.println("Experience: " + experience + " years");
+        AppUtils.showAlert("Success", "Your account is now active! Please login using your registered credentials.");
 
-        showAlert("Success", "Account created successfully!");
-
-        // OPTIONAL: Redirect to login after register
-        goToLogin(event);
+        JavafxACASapp.changeScene("javafx-ACAS-app-view.fxml",1280,720);
     }
 
-    // ===== BACK BUTTON =====
+    // defining back button action - returns to login page
     @FXML
     private void handleBack(ActionEvent event) {
-        goToLogin(event);
-    }
-
-    // ===== SCENE SWITCH METHOD =====
-    private void goToLogin(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(
-                    getClass().getResource("/com/cts/javafxacasapp/javafx-ACAS-app-view.fxml")
-            );
-
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-
+            JavafxACASapp.changeScene("javafx-ACAS-app-view.fxml",1280,720);
         } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Could not load login page.");
+            throw new RuntimeException(e);
         }
     }
 
-    // ===== ALERT METHOD =====
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    public void handleLogin(ActionEvent actionEvent) {
-    }
 }
+

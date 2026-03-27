@@ -90,7 +90,7 @@
          <Label fx:id="errorLabel" textFill="red" visible="false" />
          <HBox prefHeight="54.0" prefWidth="364.0" spacing="10.0">
             <children>
-               <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="48.0" prefWidth="185.0" style="-fx-background-color: linear-gradient(to right, #cc2200, #ff3300);                                -fx-text-fill: #ffffff; -fx-font-family: 'Arial Black';                                -fx-font-size: 14px; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;" text="CREATE ACCOUNT" />
+               <Button fx:id="loginButton" onAction="#handleRegister" prefHeight="48.0" prefWidth="185.0" style="-fx-background-color: linear-gradient(to right, #cc2200, #ff3300);                                -fx-text-fill: #ffffff; -fx-font-family: 'Arial Black';                                -fx-font-size: 14px; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;" text="CREATE ACCOUNT" />
                <Button fx:id="registerButton1" onAction="#handleBack" prefHeight="48.0" prefWidth="185.0" style="-fx-background-color: transparent; -fx-border-color: #3a4a65;                                -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8;                                -fx-text-fill: #a0a8b8; -fx-font-family: 'Arial Black';                                -fx-font-size: 13px; -fx-cursor: hand;" text="BACK TO LOGIN" />
             </children>
          </HBox>

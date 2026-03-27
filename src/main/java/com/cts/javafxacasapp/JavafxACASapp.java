@@ -89,7 +89,7 @@ public class JavafxACASapp extends Application {
                 currentStg.setTitle("ACAS - Manage Diagnostic Rules");
                 break;
 
-            case "acas-login-view.fxml":
+            case "javafx-ACAS-app-view.fxml":
                 currentStg.setTitle("ACAS - User Login");
                 break;
         }
