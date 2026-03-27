@@ -53,7 +53,7 @@
          <!-- PERSONAL -->
          <Label style="-fx-text-fill: #cc2200; -fx-font-size: 10; -fx-padding: 10 0 5 0;" text="PERSONAL INFORMATION" />
 
-         <TextField fx:id="fullNameField" promptText="Full Name">
+         <TextField fx:id="fullNameField" promptText="Full Name (first name last name)">
             <VBox.margin>
                <Insets top="5.0" />
             </VBox.margin></TextField>
@@ -61,7 +61,7 @@
             <VBox.margin>
                <Insets top="5.0" />
             </VBox.margin></TextField>
-         <TextField fx:id="emailField" promptText="Email">
+         <TextField fx:id="emailField" promptText="Email Address">
             <VBox.margin>
                <Insets top="5.0" />
             </VBox.margin></TextField>
@@ -77,11 +77,11 @@
             <VBox.margin>
                <Insets top="5.0" />
             </VBox.margin></TextField>
-         <TextField fx:id="phoneField" promptText="Phone Number">
+         <TextField fx:id="phoneField" promptText="Phone Number (e.g. 123-4567))">
             <VBox.margin>
                <Insets top="5.0" />
             </VBox.margin></TextField>
-         <TextField fx:id="experienceField" promptText="Years of Experience">
+         <TextField fx:id="experienceField" promptText="Years of Experience (e.g. 3)">
             <VBox.margin>
                <Insets top="5.0" />
             </VBox.margin></TextField>
