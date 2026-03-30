@@ -240,9 +240,6 @@
             </HBox>
 
             <Region HBox.hgrow="ALWAYS" />
-
-            <Label style="-fx-text-fill: #9ca3af;                           -fx-font-size: 11px;                           -fx-font-weight: 500;" text="ACAS v1.0 | Group 39 - Stellar Programix">
-            </Label>
         </HBox>
     </bottom>
 

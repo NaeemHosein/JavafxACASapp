@@ -71,7 +71,7 @@ public class DashboardController {
     @FXML
     private void handleReportIssue(MouseEvent event) {
         try {
-            JavafxACASapp.changeScene("report-issue.fxml", 1100, 750);
+            JavafxACASapp.changeScene("javafx-ACAS-app-report-issue.fxml", 1100, 750);
         } catch (Exception e) {
             showError("Could not load issue report screen");
             e.printStackTrace();
@@ -101,7 +101,7 @@ public class DashboardController {
     @FXML
     private void handleLogout() {
         try {
-            JavafxACASapp.changeScene("login-view.fxml", 1100, 750);
+            JavafxACASapp.changeScene("javafx-ACAS-app-view.fxml", 1100, 750);
         } catch (Exception e) {
             showError("Could not return to login screen");
             e.printStackTrace();

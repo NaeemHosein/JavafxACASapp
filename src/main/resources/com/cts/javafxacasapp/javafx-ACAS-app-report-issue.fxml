@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.cts.javafxacasapp.ReportIssueController"
+            prefHeight="750.0" prefWidth="1100.0"
+            style="-fx-background-color: #0f172a;">
+
+    <!-- Top Navigation Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="25.0"
+              style="-fx-background-color: #1e293b;
+                     -fx-padding: 20 30;
+                     -fx-border-color: #ef4444;
+                     -fx-border-width: 0 0 2 0;">
+
+            <!-- Back Button -->
+            <Button text="← Back to Dashboard" onAction="#handleBack"
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: #94a3b8;
+                           -fx-border-color: #334155;
+                           -fx-border-radius: 8;
+                           -fx-background-radius: 8;
+                           -fx-padding: 10 20;
+                           -fx-cursor: hand;
+                           -fx-font-size: 13px;
+                           -fx-font-weight: 600;">
+            </Button>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Title -->
+            <VBox alignment="CENTER" spacing="2">
+                <Label text="REPORT INCORRECT INFORMATION"
+                       style="-fx-text-fill: #ef4444;
+                              -fx-font-size: 20px;
+                              -fx-font-weight: bold;
+                              -fx-letter-spacing: 2px;">
+                </Label>
+                <Label text="Help us improve ACAS by reporting incorrect recommendations"
+                       style="-fx-text-fill: #64748b;
+                              -fx-font-size: 11px;">
+                </Label>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true"
+                    style="-fx-background-color: #0f172a; -fx-background: #0f172a;">
+            <VBox spacing="30.0" alignment="TOP_CENTER">
+                <padding>
+                    <Insets top="40.0" right="60.0" bottom="40.0" left="60.0"/>
+                </padding>
+
+                <!-- Vehicle Information Section -->
+                <VBox spacing="20" maxWidth="800"
+                      style="-fx-background-color: #1e293b;
+                             -fx-background-radius: 12;
+                             -fx-padding: 30;
+                             -fx-border-color: #334155;
+                             -fx-border-width: 1;
+                             -fx-border-radius: 12;">
+
+                    <Label text="VEHICLE INFORMATION"
+                           style="-fx-text-fill: #ef4444;
+                                  -fx-font-size: 14px;
+                                  -fx-font-weight: bold;
+                                  -fx-letter-spacing: 1.5;">
+                    </Label>
+
+                    <Separator style="-fx-background-color: #334155;"/>
+
+                    <GridPane hgap="20" vgap="18">
+                        <!-- Make -->
+                        <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Make"
+                                   style="-fx-text-fill: #cbd5e1;
+                                          -fx-font-size: 12px;
+                                          -fx-font-weight: 600;">
+                            </Label>
+                            <ComboBox fx:id="cmbMake" prefWidth="250"
+                                      promptText="Select make"
+                                      onAction="#handleMakeSelected"
+                                      style="-fx-background-color: #0f172a;
+                                            -fx-text-fill: #e2e8f0;
+                                            -fx-border-color: #475569;
+                                            -fx-border-radius: 8;
+                                            -fx-background-radius: 8;">
+                            </ComboBox>
+                        </VBox>
+
+                        <!-- Model -->
+                        <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Model"
+                                   style="-fx-text-fill: #cbd5e1;
+                                          -fx-font-size: 12px;
+                                          -fx-font-weight: 600;">
+                            </Label>
+                            <ComboBox fx:id="cmbModel" prefWidth="250"
+                                      promptText="Select model"
+                                      style="-fx-background-color: #0f172a;
+                                            -fx-text-fill: #e2e8f0;
+                                            -fx-border-color: #475569;
+                                            -fx-border-radius: 8;
+                                            -fx-background-radius: 8;">
+                            </ComboBox>
+                        </VBox>
+
+                        <!-- Year -->
+                        <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Year"
+                                   style="-fx-text-fill: #cbd5e1;
+                                          -fx-font-size: 12px;
+                                          -fx-font-weight: 600;">
+                            </Label>
+                            <ComboBox fx:id="cmbYear" prefWidth="250"
+                                      promptText="Select year"
+                                      style="-fx-background-color: #0f172a;
+                                            -fx-text-fill: #e2e8f0;
+                                            -fx-border-color: #475569;
+                                            -fx-border-radius: 8;
+                                            -fx-background-radius: 8;">
+                            </ComboBox>
+                        </VBox>
+
+                        <!-- Engine Type -->
+                        <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Engine Type"
+                                   style="-fx-text-fill: #cbd5e1;
+                                          -fx-font-size: 12px;
+                                          -fx-font-weight: 600;">
+                            </Label>
+                            <ComboBox fx:id="cmbEngineType" prefWidth="250"
+                                      promptText="Select engine"
+                                      style="-fx-background-color: #0f172a;
+                                            -fx-text-fill: #e2e8f0;
+                                            -fx-border-color: #475569;
+                                            -fx-border-radius: 8;
+                                            -fx-background-radius: 8;">
+                            </ComboBox>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- Diagnostic Code Section -->
+                <VBox spacing="20" maxWidth="800"
+                      style="-fx-background-color: #1e293b;
+                             -fx-background-radius: 12;
+                             -fx-padding: 30;
+                             -fx-border-color: #334155;
+                             -fx-border-width: 1;
+                             -fx-border-radius: 12;">
+
+                    <Label text="DIAGNOSTIC CODE"
+                           style="-fx-text-fill: #ef4444;
+                                  -fx-font-size: 14px;
+                                  -fx-font-weight: bold;
+                                  -fx-letter-spacing: 1.5;">
+                    </Label>
+
+                    <Separator style="-fx-background-color: #334155;"/>
+
+                    <VBox spacing="8">
+                        <Label text="Diagnostic Trouble Code (DTC)"
+                               style="-fx-text-fill: #cbd5e1;
+                                      -fx-font-size: 12px;
+                                      -fx-font-weight: 600;">
+                        </Label>
+                        <ComboBox fx:id="cmbDiagnosticCode" prefWidth="740"
+                                  promptText="Select the diagnostic code (e.g., P0300)"
+                                  editable="true"
+                                  style="-fx-background-color: #0f172a;
+                                        -fx-text-fill: #e2e8f0;
+                                        -fx-border-color: #475569;
+                                        -fx-border-radius: 8;
+                                        -fx-background-radius: 8;">
+                        </ComboBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Issue Report Section -->
+                <VBox spacing="20" maxWidth="800"
+                      style="-fx-background-color: #1e293b;
+                             -fx-background-radius: 12;
+                             -fx-padding: 30;
+                             -fx-border-color: #334155;
+                             -fx-border-width: 1;
+                             -fx-border-radius: 12;">
+
+                    <Label text="ISSUE DETAILS"
+                           style="-fx-text-fill: #ef4444;
+                                  -fx-font-size: 14px;
+                                  -fx-font-weight: bold;
+                                  -fx-letter-spacing: 1.5;">
+                    </Label>
+
+                    <Separator style="-fx-background-color: #334155;"/>
+
+                    <!-- Issue Type -->
+                    <VBox spacing="8">
+                        <Label text="Type of Issue"
+                               style="-fx-text-fill: #cbd5e1;
+                                      -fx-font-size: 12px;
+                                      -fx-font-weight: 600;">
+                        </Label>
+                        <ComboBox fx:id="cmbIssueType" prefWidth="740"
+                                  promptText="Select issue type"
+                                  style="-fx-background-color: #0f172a;
+                                        -fx-text-fill: #e2e8f0;
+                                        -fx-border-color: #475569;
+                                        -fx-border-radius: 8;
+                                        -fx-background-radius: 8;">
+                        </ComboBox>
+                    </VBox>
+
+                    <!-- Incorrect Recommendation -->
+                    <VBox spacing="8">
+                        <Label text="Incorrect Recommendation (if applicable)"
+                               style="-fx-text-fill: #cbd5e1;
+                                      -fx-font-size: 12px;
+                                      -fx-font-weight: 600;">
+                        </Label>
+                        <TextField fx:id="txtIncorrectPart"
+                                   promptText="e.g., NGK Spark Plug BKR5E"
+                                   style="-fx-background-color: #0f172a;
+                                         -fx-text-fill: #e2e8f0;
+                                         -fx-border-color: #475569;
+                                         -fx-border-radius: 8;
+                                         -fx-background-radius: 8;
+                                         -fx-prompt-text-fill: #64748b;
+                                         -fx-padding: 12;">
+                        </TextField>
+                    </VBox>
+
+                    <!-- Correct Solution -->
+                    <VBox spacing="8">
+                        <Label text="What Was the Actual Solution?"
+                               style="-fx-text-fill: #cbd5e1;
+                                      -fx-font-size: 12px;
+                                      -fx-font-weight: 600;">
+                        </Label>
+                        <TextField fx:id="txtCorrectSolution"
+                                   promptText="e.g., Ignition Coil replacement"
+                                   style="-fx-background-color: #0f172a;
+                                         -fx-text-fill: #e2e8f0;
+                                         -fx-border-color: #475569;
+                                         -fx-border-radius: 8;
+                                         -fx-background-radius: 8;
+                                         -fx-prompt-text-fill: #64748b;
+                                         -fx-padding: 12;">
+                        </TextField>
+                    </VBox>
+
+                    <!-- Detailed Feedback -->
+                    <VBox spacing="8">
+                        <Label text="Detailed Feedback"
+                               style="-fx-text-fill: #cbd5e1;
+                                      -fx-font-size: 12px;
+                                      -fx-font-weight: 600;">
+                        </Label>
+                        <TextArea fx:id="txtFeedback" prefHeight="120" prefWidth="740"
+                                  promptText="Please describe the issue in detail. Include what went wrong and what actually fixed the problem..."
+                                  wrapText="true"
+                                  style="-fx-control-inner-background: #0f172a;
+                                        -fx-text-fill: #e2e8f0;
+                                        -fx-border-color: #475569;
+                                        -fx-border-radius: 8;
+                                        -fx-background-radius: 8;
+                                        -fx-prompt-text-fill: #64748b;">
+                        </TextArea>
+                    </VBox>
+                </VBox>
+
+                <!-- Action Buttons -->
+                <HBox spacing="15" alignment="CENTER" maxWidth="800">
+                    <Button text="Submit Report" onAction="#handleSubmitReport"
+                            prefWidth="350" prefHeight="50"
+                            style="-fx-background-color: #ef4444;
+                                   -fx-text-fill: white;
+                                   -fx-border-radius: 10;
+                                   -fx-background-radius: 10;
+                                   -fx-cursor: hand;
+                                   -fx-font-size: 15px;
+                                   -fx-font-weight: bold;
+                                   -fx-effect: dropshadow(gaussian, rgba(239,68,68,0.4), 15, 0, 0, 5);">
+                    </Button>
+
+                    <Button text="Clear Form" onAction="#handleClearForm"
+                            prefWidth="170" prefHeight="50"
+                            style="-fx-background-color: transparent;
+                                   -fx-text-fill: #94a3b8;
+                                   -fx-border-color: #475569;
+                                   -fx-border-width: 2;
+                                   -fx-border-radius: 10;
+                                   -fx-background-radius: 10;
+                                   -fx-cursor: hand;
+                                   -fx-font-size: 14px;
+                                   -fx-font-weight: 600;">
+                    </Button>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Bottom Status Bar -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="15.0"
+              style="-fx-background-color: #1e293b;
+                     -fx-padding: 15 30;
+                     -fx-border-color: #334155;
+                     -fx-border-width: 1 0 0 0;">
+
+            <Circle radius="5" style="-fx-fill: #10b981;"/>
+            <Label fx:id="lblStatus" text="Ready to submit feedback"
+                   style="-fx-text-fill: #cbd5e1;
+                          -fx-font-size: 12px;
+                          -fx-font-weight: 500;">
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="lblError" visible="false"
+                   style="-fx-text-fill: #ef4444;
+                          -fx-font-size: 11px;
+                          -fx-font-weight: 600;">
+            </Label>
+        </HBox>
+    </bottom>
+
+</BorderPane>
