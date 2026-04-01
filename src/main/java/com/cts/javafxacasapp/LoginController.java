@@ -103,12 +103,18 @@ public class LoginController {
                 System.out.println("Login successful");
 
                 if (selectedToggle == adminBtn) {
-                    JavafxACASapp.changeScene("admin-dashboard-view.fxml", 1100, 750);
+                    SessionManager.getInstance().setUserRole("admin");
+                    SessionManager.getInstance().setUsername(username);
+                    JavafxACASapp.changeScene("javafx-ACAS-app-admin-dash.fxml", 1100, 750);
                 }
                 else if (selectedToggle == mechanicBtn) {
+                    SessionManager.getInstance().setUserRole("mechanic");
+                    SessionManager.getInstance().setUsername(username);
                     JavafxACASapp.changeScene("javafx-ACAS-app-dash.fxml", 1100, 750);
                 }
                 else if (selectedToggle == guestBtn) {
+                    SessionManager.getInstance().setUserRole("owner");
+                    SessionManager.getInstance().setUsername(username);
                     JavafxACASapp.changeScene("owner-verification-view.fxml", 1100, 750);
                 }
 
@@ -144,4 +150,5 @@ public class LoginController {
             e.printStackTrace();
         }
     }
+
 }

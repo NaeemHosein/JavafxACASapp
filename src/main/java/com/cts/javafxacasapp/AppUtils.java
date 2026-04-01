@@ -13,12 +13,15 @@
  */
 
 package com.cts.javafxacasapp;
-
-
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
 import javafx.scene.control.*;
-
 import javafx.scene.control.Label;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -163,6 +166,38 @@ public class AppUtils {
         }
 
         return -1;
+    }
+
+    // Navigation Helpers:
+
+    public static void navigateToDashboard(ActionEvent event) {
+        String role = SessionManager.getInstance().getUserRole();
+        String fxml;
+
+        switch (role) {
+            case "admin":    fxml = "javafx-ACAS-app-admin-dash.fxml"; break;
+            case "mechanic": fxml = "javafx-ACAS-app-dash.fxml";       break;
+            case "owner":    fxml = "owner-verification-view.fxml";    break;
+            default:
+                SessionManager.getInstance().clearSession();
+                fxml = "javafx-ACAS-app-login.fxml";
+                break;
+        }
+
+        navigateTo(event, fxml);
+    }
+
+    public static void navigateTo(ActionEvent event, String fxml) {
+        try {
+            Parent root = FXMLLoader.load(
+                    AppUtils.class.getResource(fxml)
+            );
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 package com.cts.javafxacasapp;
-
+import javafx.event.ActionEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -276,12 +276,7 @@ public class ReportIssueController {
      * Go back to dashboard
      */
     @FXML
-    private void handleBack() {
-        try {
-            JavafxACASapp.changeScene("javafx-ACAS-app-dash.fxml", 1100, 750);
-        } catch (Exception e) {
-            AppUtils.showError(lblError, "Could not return to dashboard");
-            e.printStackTrace();
-        }
+    private void handleBack(ActionEvent event) {
+        AppUtils.navigateToDashboard(event);
     }
 }

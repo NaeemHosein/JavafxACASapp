@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.event.ActionEvent;
 import java.sql.SQLException;
 
 public class PartCompatibilityController {
@@ -407,13 +408,8 @@ public class PartCompatibilityController {
      * Go back to dashboard
      */
     @FXML
-    private void handleBack() {
-        try {
-            JavafxACASapp.changeScene("javafx-ACAS-app-dash.fxml", 1100, 750);
-        } catch (Exception e) {
-            showError("Could not return to dashboard");
-            e.printStackTrace();
-        }
+    private void handleBack(ActionEvent event) {
+        AppUtils.navigateToDashboard(event);
     }
 
     /**

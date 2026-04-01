@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane prefHeight="750.0" prefWidth="1100.0" style="-fx-background-color: #121823;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cts.javafxacasapp.DashboardController">
+<BorderPane prefHeight="750.0" prefWidth="1100.0" style="-fx-background-color: #121823;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cts.javafxacasapp.AdminDashboardController">
 
     <!-- Top Navigation Bar - Glass Morphism Style -->
     <top>
@@ -28,7 +28,7 @@
                   <Image url="@../../../img/ACAS.png" />
                </image>
             </ImageView>
-                <VBox prefHeight="58.0" prefWidth="402.0" spacing="0">
+                <VBox prefHeight="58.0" prefWidth="402.0">
                     <Label style="-fx-text-fill: rgba(255, 107, 74, 1); -fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family: 'Segoe UI', sans-serif;" text="ACAS">
                     </Label>
                     <Label prefHeight="30.0" prefWidth="392.0" style="-fx-text-fill: #6b7280; -fx-font-size: 20px; -fx-font-weight: 500;" text="Automotive Component Diagnostic System">
@@ -41,7 +41,7 @@
             <!-- User Info -->
             <HBox alignment="CENTER" spacing="18" style="-fx-background-color: #f3f4f6;                          -fx-background-radius: 25;                          -fx-padding: 8 20;">
                 <Label style="-fx-font-size: 18px;" text="👤" />
-                <Label fx:id="lblWelcome" style="-fx-text-fill: #374151;                               -fx-font-size: 14px;                               -fx-font-weight: 600;" text="Welcome Mechanic">
+                <Label fx:id="lblWelcome" style="-fx-text-fill: #374151;                               -fx-font-size: 14px;                               -fx-font-weight: 600;" text="Welcome Administrator">
                 </Label>
             </HBox>
 
@@ -59,7 +59,7 @@
 
             <!-- Welcome Header -->
             <VBox alignment="CENTER" spacing="8">
-                <Label style="-fx-text-fill: rgba(255, 107, 74, 1); -fx-font-size: 34px; -fx-font-weight: bold;" text="ACAS Dashboard">
+                <Label style="-fx-text-fill: rgba(255, 107, 74, 1); -fx-font-size: 34px; -fx-font-weight: bold;" text="ACAS Administrator Dashboard">
                 </Label>
                 <Label style="-fx-text-fill: #6b7280;                               -fx-font-size: 15px;" text="Choose what you'd like to do today">
                 </Label>
@@ -69,7 +69,7 @@
             <GridPane alignment="CENTER" hgap="20.0" vgap="20.0">
 
                 <!-- Card 1: New Diagnostic -->
-                <VBox alignment="TOP_LEFT" onMouseClicked="#handleNewDiagnostic" prefHeight="190" prefWidth="230" spacing="18" style="-fx-background-color: rgba(42, 52, 70, 1); -fx-background-radius: 16; -fx-padding: 28; -fx-cursor: hand; -fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <VBox onMouseClicked="#handleNewDiagnostic" prefHeight="190" prefWidth="230" spacing="18" style="-fx-background-color: rgba(42, 52, 70, 1); -fx-background-radius: 16; -fx-padding: 28; -fx-cursor: hand; -fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);" GridPane.columnIndex="0" GridPane.rowIndex="0">
 
                     <HBox alignment="CENTER_LEFT" spacing="12">
                   <ImageView fitHeight="52.0" fitWidth="52.0">
@@ -90,7 +90,7 @@
                 </VBox>
 
                 <!-- Card 2: View Reports -->
-                <VBox alignment="TOP_LEFT" onMouseClicked="#handleViewReports" prefHeight="190" prefWidth="230" spacing="18" style="-fx-background-color: rgba(42, 52, 70, 1); -fx-background-radius: 16; -fx-padding: 28; -fx-cursor: hand; -fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <VBox onMouseClicked="#handleViewReports" prefHeight="190" prefWidth="230" spacing="18" style="-fx-background-color: rgba(42, 52, 70, 1); -fx-background-radius: 16; -fx-padding: 28; -fx-cursor: hand; -fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);" GridPane.columnIndex="1" GridPane.rowIndex="0">
 
                     <HBox alignment="CENTER_LEFT" spacing="12">
                   <ImageView fitHeight="52.0" fitWidth="52.0">
@@ -111,7 +111,7 @@
                 </VBox>
 
                 <!-- Card 3: Part Check -->
-                <VBox alignment="TOP_LEFT" onMouseClicked="#handlePartCheck" prefHeight="190" prefWidth="230" spacing="18" style="-fx-background-color: rgba(42, 52, 70, 1); -fx-background-radius: 16; -fx-padding: 28; -fx-cursor: hand; -fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                <VBox onMouseClicked="#handlePartCheck" prefHeight="190" prefWidth="230" spacing="18" style="-fx-background-color: rgba(42, 52, 70, 1); -fx-background-radius: 16; -fx-padding: 28; -fx-cursor: hand; -fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);" GridPane.columnIndex="2" GridPane.rowIndex="0">
 
                     <HBox alignment="CENTER_LEFT" spacing="12">
                   <ImageView fitHeight="52.0" fitWidth="52.0">
@@ -132,10 +132,10 @@
                 </VBox>
 
                 <!-- Card 4: Report Issue -->
-                <VBox alignment="TOP_LEFT" onMouseClicked="#handleReportIssue" prefHeight="190.0" prefWidth="230" spacing="18" style="-fx-background-color: rgba(42, 52, 70, 1); -fx-background-radius: 16; -fx-padding: 28; -fx-cursor: hand; -fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <VBox onMouseClicked="#handleReportIssue" prefHeight="190.0" prefWidth="230" spacing="18" style="-fx-background-color: rgba(42, 52, 70, 1); -fx-background-radius: 16; -fx-padding: 28; -fx-cursor: hand; -fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);" GridPane.columnIndex="0" GridPane.rowIndex="1">
 
                     <HBox alignment="CENTER_LEFT" spacing="12">
-                  <ImageView fitHeight="52.0" fitWidth="49.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@../../../img/ReportIssueIcon.png" />
                      </image>
@@ -145,14 +145,14 @@
                     <VBox spacing="6">
                         <Label style="-fx-text-fill: rgba(255, 0, 0, 0.5); -fx-font-size: 18px; -fx-font-weight: bold;" text="Report Issue">
                         </Label>
-                        <Label style="-fx-text-fill: #6b7280;                                       -fx-font-size: 13px;" text="Flag incorrect diagnostic data" wrapText="true">
+                        <Label style="-fx-text-fill: black; -fx-font-size: 13px;" text="Flag incorrect diagnostic data" wrapText="true">
                         </Label>
                     </VBox>
                 </VBox>
 
                 <!-- Admin Section Cards (Hidden by default) -->
                 <!-- Card 5: Manage Rules -->
-                <VBox fx:id="cardManageRules" alignment="TOP_LEFT" managed="false" onMouseClicked="#handleManageRules" prefHeight="190" prefWidth="230" spacing="18" style="-fx-background-color: white;                              -fx-background-radius: 16;                              -fx-padding: 28;                              -fx-cursor: hand;                              -fx-border-color: #fecaca;                              -fx-border-width: 2;                              -fx-border-radius: 16;                              -fx-effect: dropshadow(gaussian, rgba(220,38,38,0.1), 12, 0, 0, 3);" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <VBox fx:id="cardManageRules" managed="false" onMouseClicked="#handleManageRules" prefHeight="190" prefWidth="230" spacing="18" style="-fx-background-color: white;                              -fx-background-radius: 16;                              -fx-padding: 28;                              -fx-cursor: hand;                              -fx-border-color: #fecaca;                              -fx-border-width: 2;                              -fx-border-radius: 16;                              -fx-effect: dropshadow(gaussian, rgba(220,38,38,0.1), 12, 0, 0, 3);" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
 
                     <HBox alignment="CENTER_LEFT" spacing="12">
                         <Rectangle arcHeight="12" arcWidth="12" height="52" style="-fx-fill: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);" width="52" />
@@ -177,7 +177,7 @@
                 </VBox>
 
                 <!-- Card 6: Review Feedback -->
-                <VBox fx:id="cardReviewFeedback" alignment="TOP_LEFT" managed="false" onMouseClicked="#handleReviewFeedback" prefHeight="190" prefWidth="230" spacing="18" style="-fx-background-color: white;                              -fx-background-radius: 16;                              -fx-padding: 28;                              -fx-cursor: hand;                              -fx-border-color: #fecaca;                              -fx-border-width: 2;                              -fx-border-radius: 16;                              -fx-effect: dropshadow(gaussian, rgba(220,38,38,0.1), 12, 0, 0, 3);" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                <VBox fx:id="cardReviewFeedback" managed="false" onMouseClicked="#handleReviewFeedback" prefHeight="190" prefWidth="230" spacing="18" style="-fx-background-color: white;                              -fx-background-radius: 16;                              -fx-padding: 28;                              -fx-cursor: hand;                              -fx-border-color: #fecaca;                              -fx-border-width: 2;                              -fx-border-radius: 16;                              -fx-effect: dropshadow(gaussian, rgba(220,38,38,0.1), 12, 0, 0, 3);" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
 
                     <HBox alignment="CENTER_LEFT" spacing="12">
                         <Rectangle arcHeight="12" arcWidth="12" height="52" style="-fx-fill: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);" width="52" />
@@ -200,6 +200,44 @@
                     <Label style="-fx-text-fill: #a8edea;                                   -fx-font-size: 13px;                                   -fx-font-weight: 600;" text="Review →">
                     </Label>
                 </VBox>
+            <VBox onMouseClicked="#handleViewIssueReports" prefHeight="190.0" prefWidth="230" spacing="18" style="-fx-background-color: rgba(42, 52, 70, 1); -fx-background-radius: 16; -fx-padding: 28; -fx-cursor: hand; -fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="12">
+                     <children>
+                        <ImageView fitHeight="52.0" fitWidth="52.0">
+                           <image>
+                              <Image url="@../../../img/ViewIssueReportsIcon.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <VBox spacing="6">
+                     <children>
+                        <Label style="-fx-text-fill: rgba(255, 0, 0, 0.5); -fx-font-size: 18px; -fx-font-weight: bold;" text="View Issue Reports" />
+                        <Label style="-fx-text-fill: black; -fx-font-size: 13px;" text="Browse submitted issue logs" wrapText="true" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox onMouseClicked="#handleSystemConfig" prefHeight="190.0" prefWidth="230" spacing="18" style="-fx-background-color: rgba(42, 52, 70, 1); -fx-background-radius: 16; -fx-padding: 28; -fx-cursor: hand; -fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="12">
+                     <children>
+                        <ImageView fitHeight="52.0" fitWidth="52.0">
+                           <image>
+                              <Image url="@../../../img/SystemConfigIcon.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <VBox spacing="6">
+                     <children>
+                        <Label style="-fx-text-fill: rgba(255, 0, 0, 0.5); -fx-font-size: 18px; -fx-font-weight: bold;" text="System Config" />
+                        <Label minHeight="-Infinity" style="-fx-text-fill: black; -fx-font-size: 13px;" text="Adjust diagnostic criteria and rules." wrapText="true" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
             <columnConstraints>
                <ColumnConstraints />
                <ColumnConstraints />
