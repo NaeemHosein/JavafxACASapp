@@ -200,4 +200,6 @@ public class AppUtils {
         }
     }
 
+    public static void Logout() {
+    }
 }
