@@ -9,7 +9,10 @@
  * loadYears(cmbYear) - loads years 1990-2026 for combo box
  * loadEngines(cmbEngineType) -loads list of engines from vehicles table for combo box
  * loadModels(cmbModel, String make) - loads all models for a selected make
- * getVehicleId( db, make, model, engine, year)- gets matching vehicle id from the vehicle table or creates one if it doesn't exixt.
+ * getVehicleId( db, make, model, engine, year)- gets matching vehicle id from the vehicle table or creates one if it doesn't exist.
+ * Navigation Helpers:
+ * navigateToDashboard(ActionEvent event) - navigate to customer, mechanic or admin dashboard based on user role
+ *AppUtils.Logout()- clears session and logs out
  */
 
 package com.cts.javafxacasapp;
@@ -42,6 +45,7 @@ public class AppUtils {
     public static void showError(Label errorLabel, String message) {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
+        errorLabel.setStyle("-fx-text-fill: #ff4444; -fx-font-size: 12px;");
     }
 
     public static void hideError(Label errorLabel) {
@@ -115,12 +119,12 @@ public class AppUtils {
         try {
             // checking for vehicle in table
             String checkQuery = """
-            SELECT vehicle_id FROM tblvehicles
-            WHERE vehicle_make = ?
-            AND vehicle_model = ?
-            AND engine_type = ?
-            AND year = ?
-        """;
+                        SELECT vehicle_id FROM tblvehicles
+                        WHERE vehicle_make = ?
+                        AND vehicle_model = ?
+                        AND engine_type = ?
+                        AND year = ?
+                    """;
 
             PreparedStatement vehicles = db.conn.prepareStatement(checkQuery);
             vehicles.setString(1, make);
@@ -137,10 +141,10 @@ public class AppUtils {
 
             // no match found add to table
             String insertQuery = """
-            INSERT INTO tblvehicles
-            (vehicle_make, vehicle_model, engine_type, year)
-            VALUES (?, ?, ?, ?)
-        """;
+                        INSERT INTO tblvehicles
+                        (vehicle_make, vehicle_model, engine_type, year)
+                        VALUES (?, ?, ?, ?)
+                    """;
 
             PreparedStatement newVehicle = db.conn.prepareStatement(
                     insertQuery,
@@ -175,9 +179,15 @@ public class AppUtils {
         String fxml;
 
         switch (role) {
-            case "admin":    fxml = "javafx-ACAS-app-admin-dash.fxml"; break;
-            case "mechanic": fxml = "javafx-ACAS-app-dash.fxml";       break;
-            case "owner":    fxml = "owner-verification-view.fxml";    break;
+            case "admin":
+                fxml = "javafx-ACAS-app-admin-dash.fxml";
+                break;
+            case "mechanic":
+                fxml = "javafx-ACAS-app-dash.fxml";
+                break;
+            case "owner":
+                fxml = "owner-verification-view.fxml";
+                break;
             default:
                 SessionManager.getInstance().clearSession();
                 fxml = "javafx-ACAS-app-login.fxml";
@@ -200,4 +210,13 @@ public class AppUtils {
         }
     }
 
+    public static void Logout() {
+        try {
+            SessionManager.clearSession();
+            JavafxACASapp.changeScene("javafx-ACAS-app-view.fxml", 1100, 750);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

@@ -1,3 +1,6 @@
+/*
+* Tabling this until all other features are finished as mechanics checking part compatibility wasn't in the doc*/
+
 package com.cts.javafxacasapp;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -15,6 +18,12 @@ public class PartCompatibilityController {
 
     @FXML
     private Label lblStatus;
+
+    @FXML
+    private Label lblUser;
+
+    @FXML
+    private Label lblRole;
 
     @FXML
     private Label lblResultCount;
@@ -63,67 +72,36 @@ public class PartCompatibilityController {
 
     private final DatabaseConnection dc = new DatabaseConnection();
 
-    /**
-     * Initialize the form
-     */
+  // populating combo boxes using AppUtil
     @FXML
     public void initialize() {
-        loadVehicleMakes();
-        loadYears();
-        loadEngineTypes();
+        String make = cmbMake.getValue();
+
+        AppUtils.loadMakes(cmbMake);
+        AppUtils.loadModels(cmbModel,"make");
+        AppUtils.loadYears(cmbYear);
+        AppUtils.loadEngines(cmbEngineType);
+
+        cmbMake.valueProperty().addListener((obs, oldMake, newMake) -> {
+            if (newMake != null) {
+                cmbModel.getItems().clear();
+                AppUtils.loadModels(cmbModel, newMake);
+            }
+        });
+
         loadPartTypes();
         setupTableColumns();
 
         lblStatus.setText("Enter vehicle details to check compatibility");
+
+        //getting username for display
+        SessionManager session = SessionManager.getInstance();
+
+        lblUser.setText("User: " + session.getUsername());
+        lblRole.setText("Role: " + session.getUserRole());
     }
 
-    /**
-     * Load vehicle makes
-     */
-    private void loadVehicleMakes() {
-        ObservableList<String> makes = FXCollections.observableArrayList();
-        makes.addAll("Toyota", "Honda", "Ford", "Chevrolet", "Nissan", "BMW",
-                "Mercedes-Benz", "Volkswagen", "Audi", "Hyundai", "Kia",
-                "Mazda", "Subaru", "Jeep", "Ram", "GMC", "Suzuki");
-        cmbMake.setItems(makes);
-    }
 
-    /**
-     * Load vehicle models
-     */
-    private void loadModels() {
-        ObservableList<String> models = FXCollections.observableArrayList();
-        models.addAll("Camry", "Civic", "F-150", "Silverado", "Corolla", "Accord",
-                "CR-V", "RAV4", "Tacoma", "Mustang", "Altima", "Rogue",
-                "Hilux", "Land Cruiser Prado", "X-Trail", "Fit", "Swift",
-                "Vitara", "BT-50", "3", "CX-5", "Elantra", "Sportage");
-        cmbModel.setItems(models);
-    }
-
-    /**
-     * Load years
-     */
-    private void loadYears() {
-        ObservableList<String> years = FXCollections.observableArrayList();
-        int currentYear = java.time.Year.now().getValue();
-        for (int year = currentYear; year >= currentYear - 30; year--) {
-            years.add(String.valueOf(year));
-        }
-        cmbYear.setItems(years);
-    }
-
-    /**
-     * Load engine types
-     */
-    private void loadEngineTypes() {
-        ObservableList<String> engines = FXCollections.observableArrayList();
-        engines.addAll(
-                "1.3L I4", "1.5L I4", "1.6L I4", "1.8L I4", "2.0L I4", "2.4L I4", "2.5L I4",
-                "2.7L I4", "3.0L Diesel", "2.5L Diesel", "3.5L V6", "4.0L V6", "5.0L V8",
-                "5.3L V8", "5.4L V8", "V6", "V8", "4-Cylinder", "Hybrid", "Electric", "ANY"
-        );
-        cmbEngineType.setItems(engines);
-    }
 
     /**
      * Load part types from database
@@ -164,7 +142,7 @@ public class PartCompatibilityController {
     private void handleVehicleFieldChange() {
         // Load models when make is selected
         if (cmbMake.getValue() != null && cmbModel.getItems().isEmpty()) {
-            loadModels();
+            AppUtils.loadModels(cmbModel, "make");
         }
     }
 
