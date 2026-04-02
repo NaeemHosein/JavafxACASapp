@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<BorderPane prefHeight="750.0" prefWidth="1100.0" style="-fx-background-color: #0f172a;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cts.javafxacasapp.SystemConfigController">
+
+    <!-- Top Navigation Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="25.0" style="-fx-background-color: #1e293b;
+                     -fx-padding: 20 30;
+                     -fx-border-color: #ef4444;
+                     -fx-border-width: 0 0 2 0;">
+
+            <Button onAction="#handleBack" style="-fx-background-color: transparent;
+                           -fx-text-fill: #94a3b8;
+                           -fx-border-color: #334155;
+                           -fx-border-radius: 8;
+                           -fx-background-radius: 8;
+                           -fx-padding: 10 20;
+                           -fx-cursor: hand;
+                           -fx-font-size: 13px;
+                           -fx-font-weight: 600;" text="← Back to Dashboard" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <VBox alignment="CENTER" spacing="2">
+                <Label style="-fx-text-fill: #ef4444;
+                              -fx-font-size: 20px;
+                              -fx-font-weight: bold;
+                              -fx-letter-spacing: 2px;" text="SYSTEM CONFIGURATION" />
+                <Label style="-fx-text-fill: #64748b;
+                              -fx-font-size: 11px;" text="Admin — Manage diagnostic rules and system settings" />
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Label fx:id="lblUser" style="-fx-text-fill: #cbd5e1;
+                          -fx-font-size: 13px;" text="Administrator" />
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <HBox spacing="20" style="-fx-background-color: #0f172a; -fx-padding: 30 60;">
+
+            <!-- LEFT: Settings Navigation Panel -->
+            <VBox spacing="8" prefWidth="220"
+                  style="-fx-background-color: #1e293b;
+                         -fx-background-radius: 12;
+                         -fx-padding: 20;
+                         -fx-border-color: #334155;
+                         -fx-border-width: 1;
+                         -fx-border-radius: 12;">
+
+                <Label style="-fx-text-fill: #64748b;
+                              -fx-font-size: 11px;
+                              -fx-font-weight: 600;
+                              -fx-letter-spacing: 1px;" text="SETTINGS CATEGORY" />
+
+                <Separator style="-fx-background-color: #334155;" />
+
+                <Button fx:id="btnNavDiagnosticRules" onAction="#handleNavDiagnosticRules"
+                        maxWidth="Infinity" alignment="CENTER_LEFT"
+                        style="-fx-background-color: #ef4444;
+                               -fx-text-fill: white;
+                               -fx-border-radius: 8;
+                               -fx-background-radius: 8;
+                               -fx-padding: 12 16;
+                               -fx-cursor: hand;
+                               -fx-font-size: 13px;
+                               -fx-font-weight: 600;
+                               -fx-alignment: CENTER_LEFT;" text="⚙  Diagnostic Rules" />
+
+                <Button fx:id="btnNavSeverityLevels" onAction="#handleNavSeverityLevels"
+                        maxWidth="Infinity"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: #94a3b8;
+                               -fx-border-color: transparent;
+                               -fx-border-radius: 8;
+                               -fx-background-radius: 8;
+                               -fx-padding: 12 16;
+                               -fx-cursor: hand;
+                               -fx-font-size: 13px;
+                               -fx-alignment: CENTER_LEFT;" text="⚠  Severity Levels" />
+
+                <Button fx:id="btnNavVehicleTypes" onAction="#handleNavVehicleTypes"
+                        maxWidth="Infinity"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: #94a3b8;
+                               -fx-border-color: transparent;
+                               -fx-border-radius: 8;
+                               -fx-background-radius: 8;
+                               -fx-padding: 12 16;
+                               -fx-cursor: hand;
+                               -fx-font-size: 13px;
+                               -fx-alignment: CENTER_LEFT;" text="🚗  Vehicle Types" />
+
+                <Button fx:id="btnNavPartCategories" onAction="#handleNavPartCategories"
+                        maxWidth="Infinity"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: #94a3b8;
+                               -fx-border-color: transparent;
+                               -fx-border-radius: 8;
+                               -fx-background-radius: 8;
+                               -fx-padding: 12 16;
+                               -fx-cursor: hand;
+                               -fx-font-size: 13px;
+                               -fx-alignment: CENTER_LEFT;" text="🔧  Part Categories" />
+
+                <Button fx:id="btnNavSystemSettings" onAction="#handleNavSystemSettings"
+                        maxWidth="Infinity"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: #94a3b8;
+                               -fx-border-color: transparent;
+                               -fx-border-radius: 8;
+                               -fx-background-radius: 8;
+                               -fx-padding: 12 16;
+                               -fx-cursor: hand;
+                               -fx-font-size: 13px;
+                               -fx-alignment: CENTER_LEFT;" text="🖥  General Settings" />
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <Separator style="-fx-background-color: #334155;" />
+
+                <Label style="-fx-text-fill: #475569; -fx-font-size: 11px; -fx-wrap-text: true;"
+                       text="Changes are saved immediately. Some settings require app restart." />
+            </VBox>
+
+            <!-- RIGHT: Config Content Area -->
+            <VBox spacing="20" HBox.hgrow="ALWAYS">
+
+                <!-- Diagnostic Rules Panel -->
+                <VBox fx:id="panelDiagnosticRules" spacing="20"
+                      style="-fx-background-color: #1e293b;
+                             -fx-background-radius: 12;
+                             -fx-padding: 25;
+                             -fx-border-color: #334155;
+                             -fx-border-width: 1;
+                             -fx-border-radius: 12;">
+
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label style="-fx-text-fill: #ef4444;
+                                      -fx-font-size: 14px;
+                                      -fx-font-weight: bold;
+                                      -fx-letter-spacing: 1.5;" text="DIAGNOSTIC RULES" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handleAddRule"
+                                style="-fx-background-color: #ef4444;
+                                       -fx-text-fill: white;
+                                       -fx-border-radius: 8;
+                                       -fx-background-radius: 8;
+                                       -fx-padding: 8 18;
+                                       -fx-cursor: hand;
+                                       -fx-font-size: 12px;
+                                       -fx-font-weight: 600;" text="+ Add Rule" />
+                    </HBox>
+
+                    <Separator style="-fx-background-color: #334155;" />
+
+                    <!-- Rules Table -->
+                    <TableView fx:id="tblDiagnosticRules" prefHeight="250"
+                               style="-fx-background-color: #0f172a;
+                                      -fx-border-color: #475569;
+                                      -fx-border-radius: 8;">
+                        <columns>
+                            <TableColumn fx:id="colRuleId"          prefWidth="70"  text="ID" />
+                            <TableColumn fx:id="colRuleName"        prefWidth="200" text="Rule Name" />
+                            <TableColumn fx:id="colRuleCondition"   prefWidth="220" text="Condition" />
+                            <TableColumn fx:id="colRuleSeverity"    prefWidth="110" text="Severity" />
+                            <TableColumn fx:id="colRuleEnabled"     prefWidth="90"  text="Enabled" />
+                        </columns>
+                        <placeholder>
+                            <Label style="-fx-text-fill: #64748b; -fx-font-size: 13px;" text="No diagnostic rules configured." />
+                        </placeholder>
+                    </TableView>
+
+                    <!-- Rule Edit Form -->
+                    <VBox spacing="15" style="-fx-background-color: #0f172a;
+                                              -fx-background-radius: 10;
+                                              -fx-padding: 20;
+                                              -fx-border-color: #334155;
+                                              -fx-border-width: 1;
+                                              -fx-border-radius: 10;">
+
+                        <Label style="-fx-text-fill: #94a3b8; -fx-font-size: 12px; -fx-font-weight: 600;" text="EDIT / ADD RULE" />
+
+                        <GridPane hgap="20" vgap="14">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS" />
+                                <ColumnConstraints hgrow="ALWAYS" />
+                                <ColumnConstraints prefWidth="140" />
+                            </columnConstraints>
+
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: 600;" text="RULE NAME" />
+                                <TextField fx:id="txtRuleName" promptText="e.g., High Engine Temp"
+                                           style="-fx-background-color: #1e293b;
+                                                  -fx-text-fill: #e2e8f0;
+                                                  -fx-border-color: #475569;
+                                                  -fx-border-radius: 8;
+                                                  -fx-background-radius: 8;
+                                                  -fx-prompt-text-fill: #64748b;
+                                                  -fx-padding: 10;" />
+                            </VBox>
+
+                            <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: 600;" text="CONDITION" />
+                                <TextField fx:id="txtRuleCondition" promptText="e.g., temp > 110"
+                                           style="-fx-background-color: #1e293b;
+                                                  -fx-text-fill: #e2e8f0;
+                                                  -fx-border-color: #475569;
+                                                  -fx-border-radius: 8;
+                                                  -fx-background-radius: 8;
+                                                  -fx-prompt-text-fill: #64748b;
+                                                  -fx-padding: 10;" />
+                            </VBox>
+
+                            <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                <Label style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: 600;" text="SEVERITY" />
+                                <ComboBox fx:id="cmbRuleSeverity" prefWidth="140" promptText="Select"
+                                          style="-fx-background-color: #1e293b;
+                                                 -fx-text-fill: #e2e8f0;
+                                                 -fx-border-color: #475569;
+                                                 -fx-border-radius: 8;
+                                                 -fx-background-radius: 8;" />
+                            </VBox>
+
+                            <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: 600;" text="DESCRIPTION" />
+                                <TextField fx:id="txtRuleDescription" promptText="Short description of this rule..."
+                                           style="-fx-background-color: #1e293b;
+                                                  -fx-text-fill: #e2e8f0;
+                                                  -fx-border-color: #475569;
+                                                  -fx-border-radius: 8;
+                                                  -fx-background-radius: 8;
+                                                  -fx-prompt-text-fill: #64748b;
+                                                  -fx-padding: 10;"
+                                           GridPane.columnSpan="2" />
+                            </VBox>
+
+                            <VBox spacing="6" alignment="BOTTOM_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                <CheckBox fx:id="chkRuleEnabled"
+                                          style="-fx-text-fill: #cbd5e1; -fx-font-size: 13px;" text="Enabled" />
+                            </VBox>
+
+                            <rowConstraints>
+                                <RowConstraints />
+                                <RowConstraints />
+                            </rowConstraints>
+                        </GridPane>
+
+                        <HBox spacing="10" alignment="CENTER_RIGHT">
+                            <Button onAction="#handleClearRuleForm"
+                                    style="-fx-background-color: transparent;
+                                           -fx-text-fill: #94a3b8;
+                                           -fx-border-color: #334155;
+                                           -fx-border-radius: 8;
+                                           -fx-background-radius: 8;
+                                           -fx-padding: 9 18;
+                                           -fx-cursor: hand;
+                                           -fx-font-size: 13px;" text="Clear" />
+                            <Button onAction="#handleDeleteRule"
+                                    style="-fx-background-color: transparent;
+                                           -fx-text-fill: #f87171;
+                                           -fx-border-color: #f87171;
+                                           -fx-border-width: 2;
+                                           -fx-border-radius: 8;
+                                           -fx-background-radius: 8;
+                                           -fx-padding: 9 18;
+                                           -fx-cursor: hand;
+                                           -fx-font-size: 13px;
+                                           -fx-font-weight: 600;" text="Delete Rule" />
+                            <Button onAction="#handleSaveRule"
+                                    style="-fx-background-color: #ef4444;
+                                           -fx-text-fill: white;
+                                           -fx-border-radius: 8;
+                                           -fx-background-radius: 8;
+                                           -fx-padding: 9 24;
+                                           -fx-cursor: hand;
+                                           -fx-font-size: 13px;
+                                           -fx-font-weight: 600;" text="Save Rule" />
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- General System Settings Panel -->
+                <VBox fx:id="panelGeneralSettings" spacing="20"
+                      style="-fx-background-color: #1e293b;
+                             -fx-background-radius: 12;
+                             -fx-padding: 25;
+                             -fx-border-color: #334155;
+                             -fx-border-width: 1;
+                             -fx-border-radius: 12;">
+
+                    <Label style="-fx-text-fill: #ef4444;
+                                  -fx-font-size: 14px;
+                                  -fx-font-weight: bold;
+                                  -fx-letter-spacing: 1.5;" text="GENERAL SETTINGS" />
+
+                    <Separator style="-fx-background-color: #334155;" />
+
+                    <GridPane hgap="40" vgap="18">
+                        <columnConstraints>
+                            <ColumnConstraints prefWidth="300" />
+                            <ColumnConstraints hgrow="ALWAYS" />
+                        </columnConstraints>
+
+                        <Label style="-fx-text-fill: #cbd5e1; -fx-font-size: 13px;" text="Max failed login attempts" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                        <Spinner fx:id="spnMaxLoginAttempts" prefWidth="100" min="1" max="10" initialValue="3"
+                                 style="-fx-background-color: #0f172a; -fx-border-color: #475569; -fx-border-radius: 6;"
+                                 GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+                        <Label style="-fx-text-fill: #cbd5e1; -fx-font-size: 13px;" text="Session timeout (minutes)" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                        <Spinner fx:id="spnSessionTimeout" prefWidth="100" min="5" max="120" initialValue="30"
+                                 style="-fx-background-color: #0f172a; -fx-border-color: #475569; -fx-border-radius: 6;"
+                                 GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                        <Label style="-fx-text-fill: #cbd5e1; -fx-font-size: 13px;" text="Enable diagnostic logging" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                        <CheckBox fx:id="chkEnableLogging"
+                                  style="-fx-text-fill: #cbd5e1;"
+                                  GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                        <Label style="-fx-text-fill: #cbd5e1; -fx-font-size: 13px;" text="Allow guest vehicle lookup" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                        <CheckBox fx:id="chkGuestLookup"
+                                  style="-fx-text-fill: #cbd5e1;"
+                                  GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+                        <rowConstraints>
+                            <RowConstraints minHeight="36" />
+                            <RowConstraints minHeight="36" />
+                            <RowConstraints minHeight="36" />
+                            <RowConstraints minHeight="36" />
+                        </rowConstraints>
+                    </GridPane>
+
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button onAction="#handleResetDefaults"
+                                style="-fx-background-color: transparent;
+                                       -fx-text-fill: #94a3b8;
+                                       -fx-border-color: #334155;
+                                       -fx-border-radius: 8;
+                                       -fx-background-radius: 8;
+                                       -fx-padding: 9 18;
+                                       -fx-cursor: hand;
+                                       -fx-font-size: 13px;" text="Reset to Defaults" />
+                        <Button onAction="#handleSaveSettings"
+                                style="-fx-background-color: #ef4444;
+                                       -fx-text-fill: white;
+                                       -fx-border-radius: 8;
+                                       -fx-background-radius: 8;
+                                       -fx-padding: 9 24;
+                                       -fx-cursor: hand;
+                                       -fx-font-size: 13px;
+                                       -fx-font-weight: 600;" text="Save Settings" />
+                    </HBox>
+                </VBox>
+
+            </VBox>
+        </HBox>
+    </center>
+
+    <!-- Bottom Status Bar -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="15.0"
+              style="-fx-background-color: #1e293b;
+                     -fx-padding: 15 30;
+                     -fx-border-color: #334155;
+                     -fx-border-width: 1 0 0 0;">
+            <Circle fx:id="statusIndicator" radius="5" style="-fx-fill: #10b981;" />
+            <Label fx:id="lblStatus"
+                   style="-fx-text-fill: #cbd5e1;
+                          -fx-font-size: 12px;
+                          -fx-font-weight: 500;" text="System configuration loaded" />
+            <Region HBox.hgrow="ALWAYS" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

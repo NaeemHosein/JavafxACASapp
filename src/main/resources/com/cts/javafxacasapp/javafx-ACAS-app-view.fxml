@@ -72,11 +72,11 @@
                   </toggleGroup>
                </ToggleButton>
                <ToggleButton fx:id="adminBtn" prefHeight="60" prefWidth="110" selected="true" text="Admin" toggleGroup="$roleToggleGroup" />
-               <ToggleButton fx:id="guestBtn" prefHeight="60" prefWidth="110" text="Guest" toggleGroup="$roleToggleGroup" />
+               <ToggleButton fx:id="guestBtn" prefHeight="60" prefWidth="110" text="Customer" toggleGroup="$roleToggleGroup" />
             </children>
          </HBox>
             <!-- Error Label -->
-            <Label fx:id="errorLabel" visible="false" style="-fx-text-fill: #ff3333; -fx-font-size: 12px; -fx-font-weight: bold;" />
+            <Label fx:id="errorLabel" style="-fx-text-fill: #ff3333; -fx-font-size: 12px; -fx-font-weight: bold;" visible="false" />
             <!-- Login Button -->
             <VBox spacing="10" style="-fx-padding: 16 0 0 0;">
                 <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="48.0" prefWidth="314.0" style="-fx-background-color: linear-gradient(to right, #cc2200, #ff3300);                                -fx-text-fill: #ffffff; -fx-font-family: 'Arial Black';                                -fx-font-size: 14px; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;" text="LOGIN" />

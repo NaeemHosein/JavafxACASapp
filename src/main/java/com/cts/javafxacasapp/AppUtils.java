@@ -177,7 +177,7 @@ public class AppUtils {
         switch (role) {
             case "admin":    fxml = "javafx-ACAS-app-admin-dash.fxml"; break;
             case "mechanic": fxml = "javafx-ACAS-app-dash.fxml";       break;
-            case "owner":    fxml = "owner-verification-view.fxml";    break;
+            case "customer":    fxml = "javafx-ACAS-app-customer-dash.fxml";    break;
             default:
                 SessionManager.getInstance().clearSession();
                 fxml = "javafx-ACAS-app-login.fxml";

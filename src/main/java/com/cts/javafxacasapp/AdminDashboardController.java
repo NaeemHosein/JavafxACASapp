@@ -50,7 +50,7 @@ public class AdminDashboardController {
     @FXML
     private void handleViewReports(MouseEvent event) {
         try {
-            JavafxACASapp.changeScene("view-reports.fxml", 1100, 750);
+            JavafxACASapp.changeScene("javafx-ACAS-app-view-reports.fxml", 1100, 750);
         } catch (Exception e) {
             showError("Could not load reports screen");
             e.printStackTrace();
@@ -90,7 +90,7 @@ public class AdminDashboardController {
     @FXML
     private void handleReviewFeedback(MouseEvent event) {
         try {
-            JavafxACASapp.changeScene("review-feedback.fxml", 1100, 750);
+            JavafxACASapp.changeScene("javafx-ACAS-app-view-issue-reports.fxml", 1100, 750);
         } catch (Exception e) {
             showError("Could not load feedback review screen");
             e.printStackTrace();
@@ -109,7 +109,7 @@ public class AdminDashboardController {
     @FXML
     private void handleViewIssueReports() {
         try {
-            JavafxACASapp.changeScene("", 1100, 750);
+            JavafxACASapp.changeScene("javafx-ACAS-app-view-issue-report", 1100, 750);
         } catch (Exception e) {
             showError("Could not load view issue reports screen");
             e.printStackTrace();

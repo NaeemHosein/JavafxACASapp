@@ -51,7 +51,7 @@ public class DashboardController {
     @FXML
     private void handleViewReports(MouseEvent event) {
         try {
-            JavafxACASapp.changeScene("view-reports.fxml", 1100, 750);
+            JavafxACASapp.changeScene("javafx-ACAS-app-view-reports.fxml", 1100, 750);
         } catch (Exception e) {
             showError("Could not load reports screen");
             e.printStackTrace();
