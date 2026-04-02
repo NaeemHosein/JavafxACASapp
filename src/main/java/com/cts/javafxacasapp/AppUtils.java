@@ -1,18 +1,29 @@
 /**
  * Dedicated space to store methods that can be used across all controllers
- *UI Helpers:
+ *
+ * UI Helpers:
  * showAlert(title, message) - generates a popup alert with inserted title and message
  * showError(message) - sets error label to visible and prints inserted message
  * hideError() - hides error label (technically this one isn't as necessary)
+ *
  * Database Helpers:
- * loadMakes(cmbMake) -loads list of vehicle makes from vehicles table for combo box
+ * loadMakes(cmbMake) - loads list of vehicle makes from vehicles table for combo box
  * loadYears(cmbYear) - loads years 1990-2026 for combo box
- * loadEngines(cmbEngineType) -loads list of engines from vehicles table for combo box
+ * loadEngines(cmbEngineType) - loads list of engines from vehicles table for combo box
  * loadModels(cmbModel, String make) - loads all models for a selected make
- * getVehicleId( db, make, model, engine, year)- gets matching vehicle id from the vehicle table or creates one if it doesn't exixt.
+ * getVehicleId(db, make, model, engine, year) - gets matching vehicle id from the vehicle table or creates one if it doesn't exist.
+ * loadDiagnosticCodes(cmbDiagnosticCode) - loads DTC for combo box
+ * findDTC(code) - checks if DTC is in the system
+ * getUserId(username, role) - grabbing userID using username and role stored in session manager
+ * getCodeId(code) - grabs code ID from dtc table for code in parameter
+ *
+ * Navigation Helpers:
+ * navigateToDashboard(ActionEvent event) - navigate to customer, mechanic or admin dashboard based on user role
+ * AppUtils.Logout() - clears session and logs out
  */
 
 package com.cts.javafxacasapp;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -24,12 +35,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Objects;
 
 
 public class AppUtils {
 
-    //UI helpers:
-
+    // -------------------------------------------------------------------------
+    // UI Helpers
+    // -------------------------------------------------------------------------
 
     public static void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -40,8 +53,9 @@ public class AppUtils {
     }
 
     public static void showError(Label errorLabel, String message) {
-        errorLabel.setText(message);
+        errorLabel.setText("⚠ Error: " + message);
         errorLabel.setVisible(true);
+        errorLabel.setStyle("-fx-text-fill: #ff4444; -fx-font-size: 12px;");
     }
 
     public static void hideError(Label errorLabel) {
@@ -49,10 +63,13 @@ public class AppUtils {
         errorLabel.setVisible(false);
     }
 
+    // -------------------------------------------------------------------------
+    // Database Helpers
+    // -------------------------------------------------------------------------
+
     public static void loadMakes(ComboBox<String> cmbMake) {
         try {
             DatabaseConnection db = new DatabaseConnection();
-
             String query = "SELECT DISTINCT vehicle_make FROM tblvehicles";
             PreparedStatement ps = db.conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
@@ -60,7 +77,6 @@ public class AppUtils {
             while (rs.next()) {
                 cmbMake.getItems().add(rs.getString("vehicle_make"));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,7 +91,6 @@ public class AppUtils {
     public static void loadEngines(ComboBox<String> cmbEngineTypes) {
         try {
             DatabaseConnection db = new DatabaseConnection();
-
             String query = "SELECT DISTINCT engine_type FROM tblvehicles";
             PreparedStatement ps = db.conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
@@ -83,7 +98,6 @@ public class AppUtils {
             while (rs.next()) {
                 cmbEngineTypes.getItems().add(rs.getString("engine_type"));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,35 +106,45 @@ public class AppUtils {
     public static void loadModels(ComboBox<String> cmbModel, String make) {
         try {
             DatabaseConnection db = new DatabaseConnection();
-
             String query = "SELECT DISTINCT vehicle_model FROM tblvehicles WHERE vehicle_make = ?";
             PreparedStatement ps = db.conn.prepareStatement(query);
             ps.setString(1, make);
-
             ResultSet rs = ps.executeQuery();
 
             cmbModel.getItems().clear();
-
             while (rs.next()) {
                 cmbModel.getItems().add(rs.getString("vehicle_model"));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static void loadDiagnosticCodes(ComboBox<String> cmbDiagnosticCode) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+            String query = "SELECT DISTINCT code FROM tbldiagnostic_codes";
+            PreparedStatement ps = db.conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cmbDiagnosticCode.getItems().add(rs.getString("code"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static int getVehicleId(DatabaseConnection db, String make, String model, String engine, int year) {
-
         try {
-            // checking for vehicle in table
+            // Check if vehicle already exists
             String checkQuery = """
-            SELECT vehicle_id FROM tblvehicles
-            WHERE vehicle_make = ?
-            AND vehicle_model = ?
-            AND engine_type = ?
-            AND year = ?
-        """;
+                    SELECT vehicle_id FROM tblvehicles
+                    WHERE vehicle_make = ?
+                    AND vehicle_model = ?
+                    AND engine_type = ?
+                    AND year = ?
+                    """;
 
             PreparedStatement vehicles = db.conn.prepareStatement(checkQuery);
             vehicles.setString(1, make);
@@ -130,17 +154,17 @@ public class AppUtils {
 
             ResultSet rs = vehicles.executeQuery();
 
-            // if match found return id
+            // Return existing id if found
             if (rs.next()) {
                 return rs.getInt("vehicle_id");
             }
 
-            // no match found add to table
+            // Not found — insert new vehicle
             String insertQuery = """
-            INSERT INTO tblvehicles
-            (vehicle_make, vehicle_model, engine_type, year)
-            VALUES (?, ?, ?, ?)
-        """;
+                    INSERT INTO tblvehicles
+                    (vehicle_make, vehicle_model, engine_type, year)
+                    VALUES (?, ?, ?, ?)
+                    """;
 
             PreparedStatement newVehicle = db.conn.prepareStatement(
                     insertQuery,
@@ -151,12 +175,10 @@ public class AppUtils {
             newVehicle.setString(2, model);
             newVehicle.setString(3, engine);
             newVehicle.setInt(4, year);
-
             newVehicle.executeUpdate();
 
-            // getting id of new vehicle
+            // Return generated id
             ResultSet generatedKeys = newVehicle.getGeneratedKeys();
-
             if (generatedKeys.next()) {
                 return generatedKeys.getInt(1);
             }
@@ -168,19 +190,105 @@ public class AppUtils {
         return -1;
     }
 
-    // Navigation Helpers:
+    public static boolean findDTC(String code) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+            String query = "SELECT COUNT(*) FROM tbldiagnostic_codes WHERE code = ?";
+            PreparedStatement ps = db.conn.prepareStatement(query);
+            ps.setString(1, code);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static int getUserId(String username, String role) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+            String query;
+            String idColumn;
+
+            // Choose table and id column based on role
+            switch (role) {
+                case "mechanic" -> {
+                    query = "SELECT mechanic_id FROM tblmechanic WHERE username = ?";
+                    idColumn = "mechanic_id";
+                }
+                case "admin" -> {
+                    query = "SELECT admin_id FROM tbladministrator WHERE username = ?";
+                    idColumn = "admin_id";
+                }
+                case "owner" -> {
+                    query = "SELECT owner_id FROM tblvehicle_owner WHERE username = ?";
+                    idColumn = "owner_id";
+                }
+                default -> {
+                    return -1;
+                }
+            }
+
+            PreparedStatement ps = db.conn.prepareStatement(query);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(idColumn);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1; // Use for error handling
+    }
+
+    public static int getCodeId(String code) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+            String query = "SELECT code_id FROM tbldiagnostic_codes WHERE code = ?";
+            PreparedStatement ps = db.conn.prepareStatement(query);
+            ps.setString(1, code);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("code_id");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
+    // -------------------------------------------------------------------------
+    // Navigation Helpers
+    // -------------------------------------------------------------------------
 
     public static void navigateToDashboard(ActionEvent event) {
         String role = SessionManager.getInstance().getUserRole();
-        String fxml = switch (role) {
-            case "admin" -> "javafx-ACAS-app-admin-dash.fxml";
-            case "mechanic" -> "javafx-ACAS-app-dash.fxml";
-            case "customer" -> "javafx-ACAS-app-customer-dash.fxml";
-            default -> {
+        String fxml;
+
+        switch (role) {
+            case "admin":
+                fxml = "javafx-ACAS-app-admin-dash.fxml";
+                break;
+            case "mechanic":
+                fxml = "javafx-ACAS-app-dash.fxml";
+                break;
+            case "customer":
+                fxml = "javafx-ACAS-app-customer-dash.fxml";
+                break;
+            default:
                 SessionManager.getInstance().clearSession();
-                yield "javafx-ACAS-app-login.fxml";
-            }
-        };
+                fxml = "javafx-ACAS-app-login.fxml";
+                break;
+        }
 
         navigateTo(event, fxml);
     }
@@ -188,7 +296,7 @@ public class AppUtils {
     public static void navigateTo(ActionEvent event, String fxml) {
         try {
             Parent root = FXMLLoader.load(
-                    AppUtils.class.getResource(fxml)
+                    Objects.requireNonNull(AppUtils.class.getResource(fxml))
             );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -199,5 +307,11 @@ public class AppUtils {
     }
 
     public static void Logout() {
+        try {
+            SessionManager.clearSession();
+            JavafxACASapp.changeScene("javafx-ACAS-app-view.fxml", 1100, 750);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
