@@ -125,14 +125,18 @@
                     <VBox maxHeight="-Infinity" maxWidth="460" prefHeight="435.0" prefWidth="355.0" spacing="20.0" style="-fx-background-color: #121823; -fx-padding: 30; -fx-background-radius: 16; -fx-border-radius: 16; -fx-border-color: rgba(255,255,255,0.08);">
                         <children>
                             <!-- Vehicle Info Header -->
+                            <!-- Vehicle Info Header -->
                             <VBox spacing="5">
                                 <Label style="-fx-text-fill: #9ca3af; -fx-font-size: 14px; -fx-font-weight: 500;" text="CURRENT VEHICLE" />
                                 <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: rgba(255,255,255,0.05); -fx-padding: 15; -fx-background-radius: 12;">
                                     <VBox spacing="2">
-                                        <Label fx:id="lblVehicleName" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="2019 Toyota Camry" />
+                                        <!-- Ensure these IDs exist and match your Controller exactly -->
+                                        <Label fx:id="lblVehicleName" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="No Vehicle Selected" />
+                                        <Label fx:id="lblVehicleVin" style="-fx-text-fill: #6b7280; -fx-font-size: 13px;" text="VIN: ----" />
                                     </VBox>
                                 </HBox>
                             </VBox>
+
 
                             <!-- Recent Searches -->
                             <VBox fx:id="vboxRecentSearches" spacing="10" VBox.vgrow="ALWAYS">
