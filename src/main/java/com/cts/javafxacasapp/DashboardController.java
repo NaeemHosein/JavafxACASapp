@@ -40,7 +40,7 @@ public class DashboardController {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-diagnostic.fxml", 1100, 750);
         } catch (Exception e) {
-            AppUtils.showError(lblStatus,"⚠ Error: Could not load diagnostic screen");
+            AppUtils.showError(lblStatus,"Could not load diagnostic screen");
             e.printStackTrace();
         }
     }
@@ -50,7 +50,7 @@ public class DashboardController {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-view-reports.fxml", 1100, 750);
         } catch (Exception e) {
-            AppUtils.showError(lblStatus,"⚠ Error: Could not load reports screen");
+            AppUtils.showError(lblStatus,"Could not load reports screen");
             e.printStackTrace();
         }
     }
@@ -60,7 +60,7 @@ public class DashboardController {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-part-compatibility.fxml", 1100, 750);
         } catch (Exception e) {
-            AppUtils.showError(lblStatus, "⚠ Error: Could not load compatibility screen");
+            AppUtils.showError(lblStatus, "Could not load compatibility screen");
             e.printStackTrace();
         }
     }

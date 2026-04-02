@@ -126,7 +126,7 @@ public class DatabaseConnection  {
             sql.executeUpdate("""
                             CREATE TABLE IF NOT EXISTS tbldiagnostic_codes (
                             code_id INT AUTO_INCREMENT PRIMARY KEY,
-                            code INT NOT NULL,
+                            code VARCHAR(5) NOT NULL,
                             description TEXT NOT NULL,
                             resolution TEXT NOT NULL,
                             faulty_part VARCHAR(50) )
@@ -154,6 +154,8 @@ public class DatabaseConnection  {
                             full_name VARCHAR(50) NOT NULL,
                             username VARCHAR(50) NOT NULL UNIQUE,
                             password VARCHAR(20) NOT NULL,
+                            rating INT(1),
+                            feedback TEXT,
                             FOREIGN KEY (vehicle_id) REFERENCES tblvehicles(vehicle_id)
                             )
                             """);
@@ -256,26 +258,26 @@ public class DatabaseConnection  {
             // inserting dtc code info into table (20 to start)
             sql.executeUpdate("""
             INSERT INTO tbldiagnostic_codes (code, description, resolution, faulty_part) VALUES
-            (101,'Mass air flow sensor range issue','Clean or replace MAF sensor','MAF sensor'),
-            (108,'MAP sensor high input','Replace MAP sensor','MAP sensor'),
-            (112,'IAT sensor low input','Check wiring or replace','IAT sensor'),
-            (113,'IAT sensor high input','Replace IAT sensor','IAT sensor'),
-            (117,'ECT sensor low input','Check wiring','ECT sensor'),
-            (118,'ECT sensor high input','Replace sensor','ECT sensor'),
-            (121,'TPS range issue','Inspect TPS','Throttle position sensor'),
-            (122,'TPS low input','Replace TPS','Throttle position sensor'),
-            (125,'Coolant temp issue','Replace thermostat','Thermostat'),
-            (131,'O2 sensor low voltage','Replace O2 sensor','Oxygen sensor'),
-            (138,'O2 sensor high voltage','Replace O2 sensor','Oxygen sensor'),
-            (140,'O2 no activity','Replace sensor','Oxygen sensor'),
-            (158,'O2 sensor high voltage','Replace sensor','Oxygen sensor'),
-            (171,'System too lean','Check vacuum leaks',NULL),
-            (175,'System too rich','Check injectors',NULL),
-            (300,'Engine misfire','Inspect plugs/coils',NULL),
-            (301,'Cylinder 1 misfire','Replace spark plug','Spark plug'),
-            (302,'Cylinder 2 misfire','Replace spark plug','Spark plug'),
-            (303,'Cylinder 3 misfire','Replace spark plug','Spark plug'),
-            (304,'Cylinder 4 misfire','Replace spark plug','Spark plug')
+            ('P0101','Mass air flow sensor range issue','Clean or replace MAF sensor','MAF sensor'),
+            ('P0108','MAP sensor high input','Replace MAP sensor','MAP sensor'),
+            ('P0112','IAT sensor low input','Check wiring or replace','IAT sensor'),
+            ('P0113','IAT sensor high input','Replace IAT sensor','IAT sensor'),
+            ('P0117','ECT sensor low input','Check wiring','ECT sensor'),
+            ('P0118','ECT sensor high input','Replace sensor','ECT sensor'),
+            ('P0121','TPS range issue','Inspect TPS','Throttle position sensor'),
+            ('P0122','TPS low input','Replace TPS','Throttle position sensor'),
+            ('P0125','Coolant temp issue','Replace thermostat','Thermostat'),
+            ('P0131','O2 sensor low voltage','Replace O2 sensor','Oxygen sensor'),
+            ('P0138','O2 sensor high voltage','Replace O2 sensor','Oxygen sensor'),
+            ('P0140','O2 no activity','Replace sensor','Oxygen sensor'),
+            ('P0158','O2 sensor high voltage','Replace sensor','Oxygen sensor'),
+            ('P0171','System too lean','Check vacuum leaks',NULL),
+            ('P0175','System too rich','Check injectors',NULL),
+            ('P0300','Engine misfire','Inspect plugs/coils',NULL),
+            ('P0301','Cylinder 1 misfire','Replace spark plug','Spark plug'),
+            ('P0302','Cylinder 2 misfire','Replace spark plug','Spark plug'),
+            ('P0303','Cylinder 3 misfire','Replace spark plug','Spark plug'),
+            ('P0304','Cylinder 4 misfire','Replace spark plug','Spark plug')
         """);
 
             //adding 50 parts to parts table

@@ -82,6 +82,8 @@ public class PartCompatibilityController {
         AppUtils.loadYears(cmbYear);
         AppUtils.loadEngines(cmbEngineType);
 
+        //adding listener to populate models based on make
+
         cmbMake.valueProperty().addListener((obs, oldMake, newMake) -> {
             if (newMake != null) {
                 cmbModel.getItems().clear();
@@ -94,7 +96,7 @@ public class PartCompatibilityController {
 
         lblStatus.setText("Enter vehicle details to check compatibility");
 
-        //getting username for display
+        //getting username and role for display
         SessionManager session = SessionManager.getInstance();
 
         lblUser.setText("User: " + session.getUsername());
