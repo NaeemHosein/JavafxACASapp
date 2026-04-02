@@ -1,17 +1,23 @@
+/**
+ * Diagnostic Report form. Currently adds result to report table upon submission
+ * TO DO: Generate PDF upon tapping generate report
+ */
+
 package com.cts.javafxacasapp;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
-import java.sql.SQLException;
 
+import java.sql.PreparedStatement;
 
 public class DiagnosticInputController {
 
     @FXML
     private Label lblUser;
+
+    @FXML
+    private Label lblRole;
 
     @FXML
     private Label lblStatus;
@@ -29,13 +35,7 @@ public class DiagnosticInputController {
     private ComboBox<String> cmbEngineType;
 
     @FXML
-    private ComboBox<String> cmbSymptom;
-
-    @FXML
     private ComboBox<String> cmbDiagnosticCode;
-
-    @FXML
-    private TextArea txtNotes;
 
     private final DatabaseConnection dc = new DatabaseConnection();
 
@@ -44,173 +44,91 @@ public class DiagnosticInputController {
      */
     @FXML
     public void initialize() {
-        loadVehicleMakes();
-        loadSymptoms();
-        loadDiagnosticCodes();
-        loadYears();
-        loadEngineTypes();
+
+        //populating combo boxes using methods in AppUtil
+        AppUtils.loadMakes(cmbMake);
+        AppUtils.loadYears(cmbYear);
+        AppUtils.loadEngines(cmbEngineType);
+        AppUtils.loadDiagnosticCodes(cmbDiagnosticCode);
+
+        //adding listener to populate models based on make
+        cmbMake.valueProperty().addListener((obs, oldMake, newMake) -> {
+            if (newMake != null) {
+                cmbModel.getItems().clear();
+                AppUtils.loadModels(cmbModel, newMake);
+            }
+        });
 
         lblStatus.setText("Ready to diagnose");
+
+        //getting username and role for display
+        SessionManager session = SessionManager.getInstance();
+        lblUser.setText("User: " + session.getUsername());
+        lblRole.setText("Role: " + session.getUserRole());
     }
 
     /**
-     * Load vehicle makes
-     */
-    private void loadVehicleMakes() {
-        ObservableList<String> makes = FXCollections.observableArrayList();
-        makes.addAll("Toyota", "Honda", "Ford", "Chevrolet", "Nissan", "BMW",
-                "Mercedes-Benz", "Volkswagen", "Audi", "Hyundai", "Kia",
-                "Mazda", "Subaru", "Jeep", "Ram", "GMC");
-        cmbMake.setItems(makes);
-    }
-
-    /**
-     * Load vehicle models
-     */
-    private void loadModels() {
-        ObservableList<String> models = FXCollections.observableArrayList();
-        models.addAll("Camry", "Civic", "F-150", "Silverado", "Corolla", "Accord",
-                "CR-V", "RAV4", "Tacoma", "Mustang", "Altima", "Rogue");
-        cmbModel.setItems(models);
-    }
-
-    /**
-     * Load years (past 20 years)
-     */
-    private void loadYears() {
-        ObservableList<String> years = FXCollections.observableArrayList();
-        int currentYear = java.time.Year.now().getValue();
-        for (int year = currentYear; year >= currentYear - 20; year--) {
-            years.add(String.valueOf(year));
-        }
-        cmbYear.setItems(years);
-    }
-
-    /**
-     * Load engine types
-     */
-    private void loadEngineTypes() {
-        ObservableList<String> engines = FXCollections.observableArrayList();
-        engines.addAll(
-                "4-Cylinder",
-                "V6",
-                "V8",
-                "Turbo 4-Cylinder",
-                "Hybrid",
-                "Electric",
-                "Diesel",
-                "1.5L 4-Cylinder",
-                "2.0L 4-Cylinder",
-                "2.5L 4-Cylinder",
-                "3.5L V6",
-                "5.0L V8"
-        );
-        cmbEngineType.setItems(engines);
-    }
-
-    /**
-     * Load symptoms from database
-     */
-    private void loadSymptoms() {
-        try {
-            ObservableList<String> symptoms = FXCollections.observableArrayList();
-            String query = "SELECT symptom_name FROM tblsymptoms ORDER BY symptom_name";
-            dc.rst = dc.stat.executeQuery(query);
-
-            while (dc.rst.next()) {
-                symptoms.add(dc.rst.getString("symptom_name"));
-            }
-
-            cmbSymptom.setItems(symptoms);
-            lblStatus.setText("Loaded " + symptoms.size() + " symptoms from database");
-
-        } catch (SQLException e) {
-            showError("Error loading symptoms: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Load diagnostic codes from database
-     */
-    private void loadDiagnosticCodes() {
-        try {
-            ObservableList<String> codes = FXCollections.observableArrayList();
-            String query = "SELECT code, description FROM tbldiagnostic_codes ORDER BY code";
-            dc.rst = dc.stat.executeQuery(query);
-
-            while (dc.rst.next()) {
-                String code = dc.rst.getString("code");
-                String desc = dc.rst.getString("description");
-                codes.add(code + " - " + desc);
-            }
-
-            cmbDiagnosticCode.setItems(codes);
-
-        } catch (SQLException e) {
-            showError("Error loading diagnostic codes: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Handle make selection change to load related models
-     */
-    @FXML
-    private void handleMakeSelected() {
-        if (cmbMake.getValue() != null) {
-            loadModels();
-        }
-    }
-
-    /**
-     * Generate diagnosis based on inputs
-     * TODO: GROUP MEMBER TO IMPLEMENT DIAGNOSTIC MATCHING LOGIC
+     * Storing report in report table for viewing in another Ui
      */
     @FXML
     private void handleGenerateDiagnosis() {
+
         // Validate inputs first
         if (!validateInputs()) {
             return;
         }
 
         try {
-            // Get input values
+
             String make = cmbMake.getValue();
             String model = cmbModel.getValue();
             int year = Integer.parseInt(cmbYear.getValue());
             String engine = cmbEngineType.getValue();
-            String symptom = cmbSymptom.getValue();
-            String codeText = cmbDiagnosticCode.getValue();
-            String notes = txtNotes.getText();
+            String code = cmbDiagnosticCode.getValue();
 
-            // Extract just the code (e.g., "P0300" from "P0300 - Description")
-            String code = codeText != null ? codeText.split(" - ")[0] : null;
+            DatabaseConnection db = new DatabaseConnection();
 
-            lblStatus.setText("Searching for matching diagnostic rules...");
+            //grabbing IDs
+            SessionManager session = SessionManager.getInstance();
+            String username = session.getUsername();
+            String role = session.getUserRole();
 
-            // ============================================================
-            // TODO: GROUP MEMBER IMPLEMENTATION REQUIRED
-            // ============================================================
-            // 1. Build SQL query to search tbldiagnostic_rules table
-            // 2. Query should match on:
-            //    - symptom (from tblsymptoms)
-            //    - code (from tbldiagnostic_codes) if provided
-            //    - vehicle make, model, year range, engine type
-            // 3. Join with tblparts to get part recommendation
-            // 4. If match found:
-            //    - Save report to tbldiagnostic_reports table
-            //    - Show success message
-            //    - Optional: Navigate to results screen
-            // 5. If no match found:
-            //    - Show "No recommendations found" message
-            // ============================================================
+            int mechanicId = AppUtils.getUserId(username, role);
+            int vehicleId = AppUtils.getVehicleId(db, make, model, engine, year);
+            int codeId = AppUtils.getCodeId(code);
 
-            // PLACEHOLDER - Remove this after implementing logic above
-            showWarning("Diagnostic logic not yet implemented. Group member needs to add this.");
+            // catching error in database return
+            if (mechanicId == -1 || vehicleId == -1 || codeId == -1) {
+                AppUtils.showError(lblStatus, "Error retrieving required data.");
+                return;
+            }
+
+            lblStatus.setText("Saving diagnostic report...");
+
+            //inserting into reports table
+            String query = """
+                INSERT INTO tbldiagnostic_reports
+                (mechanic_id, code_id, vehicle_id, flag, report_date)
+                VALUES (?, ?, ?, ?, NOW())
+            """;
+
+            PreparedStatement ps = db.conn.prepareStatement(query);
+
+            ps.setInt(1, mechanicId);
+            ps.setInt(2, codeId);
+            ps.setInt(3, vehicleId);
+            ps.setInt(4, 0);
+
+
+            ps.executeUpdate();
+
+            lblStatus.setText("Report generated successfully!Please tap View Reports to access your report.");
+
+            // redirrecting to view reports screen
+            JavafxACASapp.changeScene("javafx-ACAS-app-view-reports.fxml", 1100, 750);
 
         } catch (Exception e) {
-            showError("Error generating diagnosis: " + e.getMessage());
+            AppUtils.showError(lblStatus, "We encountered an error generating your report.");
             e.printStackTrace();
         }
     }
@@ -218,27 +136,33 @@ public class DiagnosticInputController {
     /**
      * Validate form inputs
      */
-    private boolean validateInputs() {
+    public boolean validateInputs() {
+
         if (cmbMake.getValue() == null) {
-            showError("Please select a vehicle make");
+            AppUtils.showError(lblStatus,"Please select a vehicle make");
             return false;
         }
         if (cmbModel.getValue() == null) {
-            showError("Please select a vehicle model");
+            AppUtils.showError(lblStatus,"Please select a vehicle model");
             return false;
         }
         if (cmbYear.getValue() == null) {
-            showError("Please select a year");
+            AppUtils.showError(lblStatus,"Please select a year");
             return false;
         }
         if (cmbEngineType.getValue() == null) {
-            showError("Please select an engine type");
+            AppUtils.showError(lblStatus,"Please select an engine type");
             return false;
         }
-        if (cmbSymptom.getValue() == null) {
-            showError("Please select a symptom");
+        if (cmbDiagnosticCode.getValue() == null) {
+            AppUtils.showError(lblStatus,"Please select or enter a diagnostic code");
             return false;
         }
+        if (!AppUtils.findDTC(cmbDiagnosticCode.getValue())) {
+            AppUtils.showError(lblStatus,"Selected diagnostic code is not currently accessible ACAS' database");
+            return false;
+        }
+
         return true;
     }
 
@@ -260,27 +184,16 @@ public class DiagnosticInputController {
         cmbModel.setValue(null);
         cmbYear.setValue(null);
         cmbEngineType.setValue(null);
-        cmbSymptom.setValue(null);
         cmbDiagnosticCode.setValue(null);
-        txtNotes.clear();
         lblStatus.setText("Form reset - ready for new diagnosis");
     }
 
     /**
      * Go back to dashboard
      */
-
     @FXML
     private void handleBack(ActionEvent event) {
         AppUtils.navigateToDashboard(event);
-    }
-
-    /**
-     * Show error message
-     */
-    private void showError(String message) {
-        lblStatus.setText("❌ " + message);
-        lblStatus.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 12px;");
     }
 
     /**
@@ -289,13 +202,5 @@ public class DiagnosticInputController {
     private void showSuccess(String message) {
         lblStatus.setText("✓ " + message);
         lblStatus.setStyle("-fx-text-fill: #10b981; -fx-font-size: 12px;");
-    }
-
-    /**
-     * Show warning message
-     */
-    private void showWarning(String message) {
-        lblStatus.setText("⚠ " + message);
-        lblStatus.setStyle("-fx-text-fill: #f59e0b; -fx-font-size: 12px;");
     }
 }

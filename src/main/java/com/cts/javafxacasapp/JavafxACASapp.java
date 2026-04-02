@@ -1,3 +1,8 @@
+
+// TO DO : UPDATE HEADERS FOR EACH PAGE
+// UPDATE PRINT LN STATEMENTS TO PRINT SAMPLE USERNAMES ANS PASSWORDS
+// CREATE README FILE*/
+
 package com.cts.javafxacasapp;
 
 import javafx.application.Application;
@@ -41,6 +46,14 @@ public class JavafxACASapp extends Application {
         primaryStage.setMinWidth(900);
         primaryStage.setMinHeight(600);
 
+
+        //Adding logo icon
+        primaryStage.getIcons().add(
+                new javafx.scene.image.Image(
+                        getClass().getResourceAsStream("/img/ACAS-icon.png")
+                )
+        );
+
         primaryStage.show();
 
         try {
@@ -67,20 +80,20 @@ public class JavafxACASapp extends Application {
         Parent pane = FXMLLoader.load(JavafxACASapp.class.getResource("/com/cts/javafxacasapp/" + fxml));
 
         switch (fxml) {
-            case "mechanic-dashboard-view.fxml":
+            case "javafx-ACAS-app-dash.fxml":
                 currentStg.setTitle("ACAS - Mechanic Dashboard");
                 break;
 
-            case "admin-dashboard-view.fxml":
+            case "javafx-ACAS-app-admin-dash.fxml":
                 currentStg.setTitle("ACAS - Administrator Dashboard");
                 break;
 
-            case "owner-verification-view.fxml":
-                currentStg.setTitle("ACAS - Part Compatibility Verification");
+            case "javafx-ACAS-app-part-compatibility.fxml":
+                currentStg.setTitle("ACAS - Part Compatibility Checker");
                 break;
 
-            case "diagnostic-report-view.fxml":
-                currentStg.setTitle("ACAS - Diagnostic Report");
+            case "javafx-ACAS-app-diagnostic.fxml":
+                currentStg.setTitle("ACAS - Generate Diagnostic Report");
                 break;
 
             case "manage-rules-view.fxml":

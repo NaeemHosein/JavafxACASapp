@@ -1,10 +1,16 @@
+/**
+ * Mechanic Dashboard- handles navigation to main mechanic use cases
+ * Status label is updated with real time error catching and uses appUtil methods
+ * TO DO: integrate session class so that username and role is stored and passed through
+ * Update: added check part compatibility feature for mechanics as well
+ */
+
 package com.cts.javafxacasapp;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
-import java.io.IOException;
+
 
 public class DashboardController {
 
@@ -14,28 +20,19 @@ public class DashboardController {
     @FXML
     private Label lblStatus;
 
-    @FXML
-    private VBox cardManageRules;
 
-    @FXML
-    private VBox cardReviewFeedback;
 
-    /**
-     * Called after login to set up the dashboard for the logged-in user
-     */
-    public void initialize(String username, String role) {
-        lblWelcome.setText("Welcome, " + username);
+    public void initialize() {
 
-        // Show admin cards if user is admin
-        if ("admin".equalsIgnoreCase(role)) {
-            cardManageRules.setVisible(true);
-            cardManageRules.setManaged(true);
-            cardReviewFeedback.setVisible(true);
-            cardReviewFeedback.setManaged(true);
-        }
+        //attempting to initialize session
+        SessionManager session = SessionManager.getInstance();
 
-        // Set connection status
-        lblStatus.setText("● Connected");
+        lblWelcome.setText("Welcome, " + session.getUsername());
+
+
+
+        // setting connection status
+        lblStatus.setText(" Connected");
     }
 
     @FXML
@@ -43,7 +40,7 @@ public class DashboardController {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-diagnostic.fxml", 1100, 750);
         } catch (Exception e) {
-            showError("Could not load diagnostic screen");
+            AppUtils.showError(lblStatus,"Could not load diagnostic screen");
             e.printStackTrace();
         }
     }
@@ -53,7 +50,7 @@ public class DashboardController {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-view-reports.fxml", 1100, 750);
         } catch (Exception e) {
-            showError("Could not load reports screen");
+            AppUtils.showError(lblStatus,"Could not load reports screen");
             e.printStackTrace();
         }
     }
@@ -63,56 +60,16 @@ public class DashboardController {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-part-compatibility.fxml", 1100, 750);
         } catch (Exception e) {
-            showError("Could not load compatibility screen");
+            AppUtils.showError(lblStatus, "Could not load compatibility screen");
             e.printStackTrace();
         }
     }
 
-    @FXML
-    private void handleReportIssue(MouseEvent event) {
-        try {
-            JavafxACASapp.changeScene("javafx-ACAS-app-report-issue.fxml", 1100, 750);
-        } catch (Exception e) {
-            showError("Could not load issue report screen");
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleManageRules(MouseEvent event) {
-        try {
-            JavafxACASapp.changeScene("manage-rules.fxml", 1100, 750);
-        } catch (Exception e) {
-            showError("Could not load rules management screen");
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleReviewFeedback(MouseEvent event) {
-        try {
-            JavafxACASapp.changeScene("review-feedback.fxml", 1100, 750);
-        } catch (Exception e) {
-            showError("Could not load feedback review screen");
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     private void handleLogout() {
-        try {
-            JavafxACASapp.changeScene("javafx-ACAS-app-view.fxml", 1100, 750);
-        } catch (Exception e) {
-            showError("Could not return to login screen");
-            e.printStackTrace();
-        }
+        AppUtils.Logout();
     }
 
-    /**
-     * Helper method to show error messages
-     */
-    private void showError(String message) {
-        lblStatus.setText("● Error: " + message);
-        lblStatus.setStyle("-fx-text-fill: #ff4444; -fx-font-size: 12px;");
-    }
+
 }

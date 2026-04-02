@@ -21,8 +21,10 @@ public class SessionManager {
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
-    public void clearSession() {
-        userRole = null;
-        username = null;
+    public static void clearSession() {
+        if (instance != null) {
+            instance.userRole = null;
+            instance.username = null;
+        }
     }
 }
