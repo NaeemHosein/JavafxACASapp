@@ -172,17 +172,15 @@ public class AppUtils {
 
     public static void navigateToDashboard(ActionEvent event) {
         String role = SessionManager.getInstance().getUserRole();
-        String fxml;
-
-        switch (role) {
-            case "admin":    fxml = "javafx-ACAS-app-admin-dash.fxml"; break;
-            case "mechanic": fxml = "javafx-ACAS-app-dash.fxml";       break;
-            case "owner":    fxml = "owner-verification-view.fxml";    break;
-            default:
+        String fxml = switch (role) {
+            case "admin" -> "javafx-ACAS-app-admin-dash.fxml";
+            case "mechanic" -> "javafx-ACAS-app-dash.fxml";
+            case "customer" -> "javafx-ACAS-app-customer-dash.fxml";
+            default -> {
                 SessionManager.getInstance().clearSession();
-                fxml = "javafx-ACAS-app-login.fxml";
-                break;
-        }
+                yield "javafx-ACAS-app-login.fxml";
+            }
+        };
 
         navigateTo(event, fxml);
     }
