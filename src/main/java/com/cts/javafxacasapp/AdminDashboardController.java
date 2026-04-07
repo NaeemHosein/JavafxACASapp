@@ -99,16 +99,13 @@ public class AdminDashboardController {
 
     @FXML
     private void handleLogout() {
-        try {
-            JavafxACASapp.changeScene("javafx-ACAS-app-view.fxml", 1100, 750);
-        } catch (Exception e) {
-            showError("Could not return to login screen");
-            e.printStackTrace();
-        }
+        AppUtils.Logout();
     }
+
     @FXML
     private void handleViewIssueReports() {
         try {
+            SessionManager.getInstance().clearSession();
             JavafxACASapp.changeScene("javafx-ACAS-app-view-issue-report", 1100, 750);
         } catch (Exception e) {
             showError("Could not load view issue reports screen");

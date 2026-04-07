@@ -12,10 +12,13 @@
  * loadEngines(cmbEngineType) - loads list of engines from vehicles table for combo box
  * loadModels(cmbModel, String make) - loads all models for a selected make
  * getVehicleId(db, make, model, engine, year) - gets matching vehicle id from the vehicle table or creates one if it doesn't exist.
+ * getVehicleId(db, username)- get vehicle id for logged in customer
+ * getVehicleDetails( db, vehicleId)- get vehicle make, model, year and engine type from vehicleid
  * loadDiagnosticCodes(cmbDiagnosticCode) - loads DTC for combo box
  * findDTC(code) - checks if DTC is in the system
  * getUserId(username, role) - grabbing userID using username and role stored in session manager
  * getCodeId(code) - grabs code ID from dtc table for code in parameter
+ * saveRating(username, rating, feedback) - saves rating to session (customer) user table and returns true when successful
  *
  * Navigation Helpers:
  * navigateToDashboard(ActionEvent event) - navigate to customer, mechanic or admin dashboard based on user role
@@ -209,6 +212,51 @@ public class AppUtils {
         return -1;
     }
 
+
+    public static int getVehicleId(DatabaseConnection db, String username) {
+        try {
+            String query = "SELECT vehicle_id FROM tblvehicle_owner WHERE username = ?";
+            PreparedStatement ps = db.conn.prepareStatement(query);
+            ps.setString(1, username);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("vehicle_id");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
+
+    public static String[] getVehicleDetails(DatabaseConnection db, int vehicleId) {
+        try {
+            String query = "SELECT year, vehicle_make, vehicle_model, engine_type FROM tblvehicles WHERE vehicle_id = ?";
+            PreparedStatement ps = db.conn.prepareStatement(query);
+            ps.setInt(1, vehicleId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new String[]{
+                        String.valueOf(rs.getInt("year")),
+                        rs.getString("vehicle_make"),
+                        rs.getString("vehicle_model"),
+                        rs.getString("engine_type")
+                };
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public static boolean findDTC(String code) {
         try {
             DatabaseConnection db = new DatabaseConnection();
@@ -308,6 +356,32 @@ public class AppUtils {
         return parts;
     }
 
+    public static boolean saveRating(String username, int rating, String feedback) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+
+            String query = """
+                UPDATE tblvehicle_owner
+                SET rating = ?, feedback = ?
+                WHERE username = ?
+                """;
+
+            PreparedStatement ps = db.conn.prepareStatement(query);
+            ps.setInt(1, rating);
+            ps.setString(2, feedback);
+            ps.setString(3, username);
+
+            int rows = ps.executeUpdate();
+
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     // -------------------------------------------------------------------------
     // Navigation Helpers
     // -------------------------------------------------------------------------
@@ -323,7 +397,7 @@ public class AppUtils {
             case "mechanic":
                 fxml = "javafx-ACAS-app-dash.fxml";
                 break;
-            case "customer":
+            case "owner":
                 fxml = "javafx-ACAS-app-customer-dash.fxml";
                 break;
             default:

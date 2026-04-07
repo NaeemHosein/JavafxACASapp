@@ -1,3 +1,7 @@
+/*Stores customer rating in feedback and rating column of veicle owner table
+*Update: feedback and rating fields added to vehicle owner table
+* Update: method added to app utils to handle adding feedback and rating to table */
+
 package com.cts.javafxacasapp;
 
 import javafx.event.ActionEvent;
@@ -15,7 +19,7 @@ import java.util.ResourceBundle;
 
 public class RateAppController implements Initializable {
 
-    // ── FXML Injections ──────────────────────────────────────────────────────
+    //defining fxml tags
 
     @FXML private Label  lblUser;
     @FXML private Label  lblRatingText;
@@ -30,22 +34,29 @@ public class RateAppController implements Initializable {
 
     @FXML private Circle statusIndicator;
     @FXML private Label  lblStatus;
+    @FXML private Label  lblRole;
 
-    // ── State ─────────────────────────────────────────────────────────────────
+
+    // setting state of stars
 
     private int selectedRating = 0;   // 0 = nothing selected yet
 
     private static final String STAR_ON  = "-fx-background-color: transparent; -fx-text-fill: #ef4444; -fx-font-size: 42px; -fx-cursor: hand; -fx-padding: 0;";
     private static final String STAR_OFF = "-fx-background-color: transparent; -fx-text-fill: #334155; -fx-font-size: 42px; -fx-cursor: hand; -fx-padding: 0;";
 
-    // ── Initializable ─────────────────────────────────────────────────────────
+    //initializing status label and session
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        updateStatus("Select a star rating and leave your feedback", Color.web("#10b981"));
+        lblStatus.setText("Select a star rating and leave your feedback");
+
+        //getting username and role for display
+        SessionManager session = SessionManager.getInstance();
+        lblUser.setText("User: " + session.getUsername());
+        lblRole.setText("Role: " + session.getUserRole());
     }
 
-    // ── Star Handlers ─────────────────────────────────────────────────────────
+    // defining star handlers
 
     @FXML private void handleStar1(ActionEvent event) { applyRating(1); }
     @FXML private void handleStar2(ActionEvent event) { applyRating(2); }
@@ -53,7 +64,7 @@ public class RateAppController implements Initializable {
     @FXML private void handleStar4(ActionEvent event) { applyRating(4); }
     @FXML private void handleStar5(ActionEvent event) { applyRating(5); }
 
-    // ── Action Handlers ───────────────────────────────────────────────────────
+    // defining action handlers from fxml
 
     @FXML
     private void handleClear(ActionEvent event) {
@@ -61,28 +72,33 @@ public class RateAppController implements Initializable {
         txtFeedback.clear();
         highlightStars(0);
         lblRatingText.setText("Click a star to rate");
-        updateStatus("Cleared. Select a rating and leave your feedback.", Color.web("#10b981"));
+        lblStatus.setText("Cleared. Select a rating and leave your feedback.");
     }
 
     @FXML
     private void handleSubmit(ActionEvent event) {
-        // Validate: a star must be selected
+        // validating rating to ensure there is a selection
         if (selectedRating == 0) {
-            updateStatus("Please select a star rating before submitting.", Color.web("#ef4444"));
+            AppUtils.showError(lblStatus,"Please select a star rating before submitting.");
             return;
         }
 
         String feedback = txtFeedback.getText().trim();
 
-        // TODO: persist to database, e.g.:
-        // db.saveRating(selectedRating, feedback);
-        System.out.println("[RateApplication] Rating : " + selectedRating + "/5");
-        System.out.println("[RateApplication] Feedback: " + feedback);
+        SessionManager session = SessionManager.getInstance();
+        String username = session.getUsername();
 
-        updateStatus("Thank you! Your " + selectedRating + "-star rating has been submitted.", Color.web("#10b981"));
+        boolean success = AppUtils.saveRating(username, selectedRating, feedback);
 
-        // Reset after submit
-        handleClear(event);
+        if (success) {
+            lblStatus.setText("Thank you! Your rating has been submitted.");
+
+            // return to customer dashboard after submitting if successful
+            AppUtils.navigateToDashboard(event);
+
+        } else {
+            AppUtils.showError(lblStatus,"Error saving your feedback. Please try again.");
+        }
     }
 
     @FXML
@@ -90,7 +106,7 @@ public class RateAppController implements Initializable {
         AppUtils.navigateToDashboard(event);
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    //helper methods for UI functionality
 
     /** Sets the selected rating and updates the star UI. */
     private void applyRating(int rating) {
@@ -99,10 +115,10 @@ public class RateAppController implements Initializable {
 
         String[] labels = { "", "Poor", "Fair", "Good", "Very Good", "Excellent" };
         lblRatingText.setText(rating + "/5 — " + labels[rating]);
-        updateStatus("You selected " + rating + " star(s). Add feedback and hit Submit.", Color.web("#10b981"));
+        lblStatus.setText("You selected " + rating + " star(s). Add feedback and hit Submit.");
     }
 
-    /** Colours in stars 1‥n and dims stars n+1‥5. */
+    /** Colours in stars when selected and dims when not */
     private void highlightStars(int upTo) {
         List<Button> stars = List.of(btnStar1, btnStar2, btnStar3, btnStar4, btnStar5);
         for (int i = 0; i < stars.size(); i++) {
@@ -110,9 +126,5 @@ public class RateAppController implements Initializable {
         }
     }
 
-    /** Updates the status bar label and indicator dot colour. */
-    private void updateStatus(String message, Color color) {
-        if (lblStatus != null)       lblStatus.setText(message);
-        if (statusIndicator != null) statusIndicator.setFill(color);
-    }
+
 }

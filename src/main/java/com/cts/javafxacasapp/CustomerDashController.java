@@ -1,8 +1,11 @@
+/*Customer/ Vehicle Owner Dashboard- customers can check part compatibility and rate the app
+* update: made session edits so that customers can view previous searches from part compatibility in dashboard
+* during the session only.*/
+
 package com.cts.javafxacasapp;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -10,7 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -18,15 +20,70 @@ import java.util.ResourceBundle;
 
 public class CustomerDashController implements Initializable {
 
-    // ── FXML Injections ──────────────────────────────────────────────────────
 
     @FXML private Label lblWelcome;
     @FXML private Label lblStatus;
     @FXML private Label lblVehicleName;
-    @FXML private Label lblVehicleVin;
+    @FXML private Label lblVehicleDetails;
     @FXML private VBox  vboxRecentSearches;
 
-    // ── Inner model ───────────────────────────────────────────────────────────
+    private List<PartSearchEntry> recentSearches; //storing recent searches as an array from session
+
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+
+
+        //attempting to initialize session
+        SessionManager session = SessionManager.getInstance();
+
+        lblWelcome.setText("Welcome, " + session.getUsername());
+
+
+        // Populating vehicle info section
+
+        try {
+
+            int vehicleId = AppUtils.getVehicleId(new DatabaseConnection(), session.getUsername());
+
+            if (vehicleId != -1) {
+                String[] vehicle = AppUtils.getVehicleDetails(new DatabaseConnection(), vehicleId);
+
+                if (vehicle != null) {
+                    String year = vehicle[0];
+                    String make = vehicle[1];
+                    String model = vehicle[2];
+                    String engine = vehicle[3];
+
+                    // adding vehicle name
+                    lblVehicleName.setText(make + " " + model);
+
+                    // adding year and engine type as details
+                    lblVehicleDetails.setText("Year: " + year + "  Engine Type: " + engine);
+                }
+            } else {
+                lblVehicleName.setText("No Vehicle Found");
+                lblVehicleDetails.setText("Please contact support");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            lblVehicleName.setText("Error loading vehicle");
+        }
+
+        //loading searches
+
+        recentSearches = session.getRecentSearches();
+
+
+        //refreshes searches everytime customer returns to dashboard
+        refreshRecentSearches();
+
+        // setting status bar text
+        lblStatus.setText("Connected");
+    }
 
     /** Represents a single part-compatibility search result. */
     public static class PartSearchEntry {
@@ -42,44 +99,13 @@ public class CustomerDashController implements Initializable {
         public boolean isCompatible()  { return compatible; }
     }
 
-    // ── State ─────────────────────────────────────────────────────────────────
 
-    /** Simulated logged-in customer name – replace with session/auth data. */
-    private String customerName = "John Doe";
 
-    /** Simulated vehicle data – replace with DB lookup by customer. */
-    private String vehicleName = "2019 Toyota Camry";
-    private String vehicleVin  = "VIN: 4T1B11HK2KUXXXXXX";
 
-    /** Recent part searches – replace with DB/persistent store. */
-    private final List<PartSearchEntry> recentSearches = new ArrayList<>();
 
-    // ── Initializable ─────────────────────────────────────────────────────────
+    // defining action handlers
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Populate welcome label
-        lblWelcome.setText("Welcome, " + customerName);
-
-        // Populate vehicle info
-        lblVehicleName.setText(vehicleName);
-        lblVehicleVin.setText(vehicleVin);
-
-        // Seed some demo recent searches
-        recentSearches.add(new PartSearchEntry("Brake Pad Set - OEM",         true));
-        recentSearches.add(new PartSearchEntry("Transmission Fluid - ATF IV",  false));
-        recentSearches.add(new PartSearchEntry("Oil Filter - Mobil 1",         true));
-
-        // Render them
-        refreshRecentSearches();
-
-        // Status bar
-        lblStatus.setText("Connected");
-    }
-
-    // ── Event Handlers ────────────────────────────────────────────────────────
-
-    /** Called when the user clicks the "Part Compatibility" card. */
+     //check compatibility button goes to part compatibility screen
     @FXML
     private void handlePartCheck(MouseEvent event) {
         try {
@@ -89,7 +115,7 @@ public class CustomerDashController implements Initializable {
             e.printStackTrace();
         }
     }
-    /** Called when the user clicks the "Rate Application" card. */
+    // rate application opens rate screen ui
     @FXML
     private void handleRateApplication() {
         try {
@@ -99,58 +125,16 @@ public class CustomerDashController implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handleLogout() {
-        try {
-            JavafxACASapp.changeScene("javafx-ACAS-app-view.fxml", 1100, 750);
-        } catch (Exception e) {
-            AppUtils.showError(lblStatus, "Something went wrong");
-            e.printStackTrace();
-        }
+        AppUtils.Logout();
     }
 
 
 
-    // Public API (call from other controllers)
 
-    /**
-     * Set the logged-in customer's name.  Call this after the user logs in
-     * before the scene is displayed.
-     */
-    public void setCustomerName(String name) {
-        this.customerName = name;
-        if (lblWelcome != null) lblWelcome.setText("Welcome, " + name);
-    }
-
-    /**
-     * Update the vehicle info panel.
-     */
-    public void setVehicleInfo(String name, String vin) {
-        this.vehicleName = name;
-        this.vehicleVin  = vin;
-        if (lblVehicleName != null) lblVehicleName.setText(name);
-        if (lblVehicleVin  != null) lblVehicleVin.setText(vin);
-    }
-
-    /**
-     * Add a new part-search result to the recent-searches list and re-render.
-     */
-    public void addRecentSearch(String partName, boolean compatible) {
-        // Keep the list bounded to the 5 most recent
-        recentSearches.add(0, new PartSearchEntry(partName, compatible));
-        if (recentSearches.size() > 5) {
-            recentSearches.remove(recentSearches.size() - 1);
-        }
-        refreshRecentSearches();
-    }
-
-    // ── Private helpers ───────────────────────────────────────────────────────
-
-    /**
-     * Rebuild the recent-searches VBox from the current {@link #recentSearches} list.
-     * Keeps the first child (the "Recent Searches" header label) and replaces
-     * everything below it.
-     */
+   // methods to attempt to capture recent searches from compatibility screen without creating a new table :')
     private void refreshRecentSearches() {
         // Remove all rows (index 1 onward), keep the header label at index 0
         if (vboxRecentSearches.getChildren().size() > 1) {

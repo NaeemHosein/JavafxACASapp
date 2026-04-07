@@ -81,9 +81,9 @@
                             </HBox>
 
                             <VBox minHeight="-Infinity" spacing="6">
-                                <Label style="-fx-text-fill: rgba(255, 0, 0, 0.5); -fx-font-size: 18px; -fx-font-weight: bold;" text="Part Compatibility">
+                                <Label style="-fx-text-fill: rgba(255, 0, 0, 0.5); -fx-font-size: 18px; -fx-font-weight: bold;" text="Check Compatibility">
                                 </Label>
-                                <Label style="-fx-text-fill: black; -fx-font-size: 13px;" text="Verify component compatibility" wrapText="true">
+                                <Label style="-fx-text-fill: black; -fx-font-size: 13px;" text="Verify part compatibility with you registered vehicle" wrapText="true">
                                 </Label>
                             </VBox>
 
@@ -132,9 +132,7 @@
                                     <VBox spacing="2">
                                         <!-- Ensure these IDs exist and match your Controller exactly -->
                                         <Label fx:id="lblVehicleName" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="No Vehicle Selected" />
-                                        <Label fx:id="lblVehicleVin"
-                                               style="-fx-text-fill: #9ca3af; -fx-font-size: 13px;"
-                                               text="VIN: -" />
+                                        <Label fx:id="lblVehicleDetails" style="-fx-text-fill: #9ca3af; -fx-font-size: 13px;" text="Year:      Engine Type: " />
                                     </VBox>
                                 </HBox>
                             </VBox>

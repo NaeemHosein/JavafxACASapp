@@ -21,13 +21,15 @@
             <Region HBox.hgrow="ALWAYS" />
 
             <VBox alignment="CENTER" spacing="2">
-                <Label style="-fx-text-fill: #ef4444;                               -fx-font-size: 20px;                               -fx-font-weight: bold;                               -fx-letter-spacing: 2px;" text="RATE APPLICATION" />
+                <Label style="-fx-text-fill: #ef4444;                               -fx-font-size: 20px;                               -fx-font-weight: bold;                               -fx-letter-spacing: 2px;" text="RATE OUR APPLICATION" />
                 <Label style="-fx-text-fill: #64748b;                               -fx-font-size: 11px;" text="Share your experience with ACAS" />
             </VBox>
 
             <Region HBox.hgrow="ALWAYS" />
 
             <Label fx:id="lblUser" style="-fx-text-fill: #cbd5e1;                           -fx-font-size: 13px;" text="" />
+         <Label fx:id="lblUser" style="-fx-text-fill: #cbd5e1;                           -fx-font-size: 13px;" text="Guest User" />
+         <Label fx:id="lblRole" style="-fx-text-fill: #cbd5e1;                           -fx-font-size: 13px;" text="Role" />
         </HBox>
     </top>
 
@@ -59,7 +61,7 @@
                 <!-- Feedback Section -->
                 <VBox spacing="10">
                     <Label style="-fx-text-fill: #ef4444;                                   -fx-font-size: 14px;                                   -fx-font-weight: bold;                                   -fx-letter-spacing: 1.5;" text="YOUR FEEDBACK" />
-                    <Label style="-fx-text-fill: #64748b; -fx-font-size: 12px;" text="Tell us what you think — what worked well, what could be better." />
+                    <Label style="-fx-text-fill: #64748b; -fx-font-size: 12px;" text="Tell us what you think and how we can improve!" />
                     <TextArea fx:id="txtFeedback" prefRowCount="6" promptText="Write your feedback here..." style="-fx-background-color: #0f172a; -fx-text-fill: black; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8; -fx-prompt-text-fill: #64748b; -fx-font-size: 13px; -fx-padding: 12;" wrapText="true" />
                 </VBox>
 
