@@ -1,5 +1,5 @@
 
-// TO DO : UPDATE HEADERS FOR EACH PAGE
+// TODO: UPDATE HEADERS FOR EACH PAGE
 // UPDATE PRINT LN STATEMENTS TO PRINT SAMPLE USERNAMES ANS PASSWORDS
 // CREATE README FILE*/
 
@@ -110,7 +110,7 @@ public class JavafxACASapp extends Application {
         }
 
         currentStg.getScene().setRoot(pane);
-        currentStg.sizeToScene(); // optional
+        currentStg.sizeToScene();
 
     }
 

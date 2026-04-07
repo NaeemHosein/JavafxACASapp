@@ -9,6 +9,7 @@ package com.cts.javafxacasapp;
  * data source.
 
  *Added Initialize Tables feature to create tables with the app
+ * Added Populate Tables feature to add sample data to tables for testing purposes
  */
 
 import java.sql.*;
@@ -20,43 +21,11 @@ public class DatabaseConnection  {
     public PreparedStatement pst;
     public Connection conn;
 
-    /*
-     * Create a Connection object to the Database
-     * Protected keyword in Java refers to one of its access modifiers.
-     * The methods or data members declared as protected can be accessed from:
-     *  1. Within the same class
-     *  2. Subclasses of same packages
-     *  3. Different classes of same packages
-     *  4. Subclasses of different packages
-     */
 
-    
-
-    //--------------------------------------------------------------------------
-    /*
-     * An object used for executing a static SQL statement and returning the
-     * results it produces.
-     */
     protected Statement stat = null;
-
-    //--------------------------------------------------------------------------
-    /*
-     * An object used for executing a static SQL statement and returning the
-     * results it produces.
-     */
     protected PreparedStatement ps = null;
-
-    //--------------------------------------------------------------------------
-    /*
-     * An object that maintains a cursor pointing to its current row of data
-     */
     protected ResultSet rst = null;
 
-    //--------------------------------------------------------------------------
-    /*
-     * This constructor connects to a MySQL database. It creates instances
-     * of the Statements and ResultSet classes to be used by other classes.
-     */
 
     private static final Logger logger = Logger.getLogger(DatabaseConnection.class.getName());
 

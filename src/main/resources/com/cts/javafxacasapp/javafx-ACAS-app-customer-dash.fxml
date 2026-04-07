@@ -132,6 +132,9 @@
                                     <VBox spacing="2">
                                         <!-- Ensure these IDs exist and match your Controller exactly -->
                                         <Label fx:id="lblVehicleName" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="No Vehicle Selected" />
+                                        <Label fx:id="lblVehicleVin"
+                                               style="-fx-text-fill: #9ca3af; -fx-font-size: 13px;"
+                                               text="VIN: -" />
                                     </VBox>
                                 </HBox>
                             </VBox>

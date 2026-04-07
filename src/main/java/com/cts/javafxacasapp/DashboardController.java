@@ -58,7 +58,7 @@ public class DashboardController {
     @FXML
     private void handlePartCheck(MouseEvent event) {
         try {
-            JavafxACASapp.changeScene("javafx-ACAS-app-part-compatibility.fxml", 1100, 750);
+            JavafxACASapp.changeScene("javafx-ACAS-app-mechanic-part-compatibility.fxml", 1100, 750);
         } catch (Exception e) {
             AppUtils.showError(lblStatus, "Could not load compatibility screen");
             e.printStackTrace();

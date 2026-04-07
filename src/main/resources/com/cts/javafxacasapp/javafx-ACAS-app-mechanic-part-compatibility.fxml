@@ -6,8 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -17,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<BorderPane prefHeight="750.0" prefWidth="1100.0" style="-fx-background-color: #0f172a;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cts.javafxacasapp.PartCompatibilityController">
+<BorderPane prefHeight="750.0" prefWidth="1100.0" style="-fx-background-color: #0f172a;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cts.javafxacasapp.MechanicPartCompatibilityController">
 
     <!-- Top Navigation Bar -->
     <top>
@@ -66,7 +64,7 @@
                         <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
                             <Label style="-fx-text-fill: #cbd5e1;                                           -fx-font-size: 12px;                                           -fx-font-weight: 600;" text="Make">
                             </Label>
-                            <ComboBox fx:id="cmbMake" onAction="#handleVehicleFieldChange" prefWidth="250" promptText="Select make" style="-fx-background-color: #0f172a; -fx-text-fill: #ffffff; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8;">
+                            <ComboBox fx:id="cmbMake" prefWidth="250" promptText="Select make" style="-fx-background-color: #0f172a; -fx-text-fill: #ffffff; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8;">
                             </ComboBox>
                         </VBox>
 
@@ -74,7 +72,7 @@
                         <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <Label style="-fx-text-fill: #cbd5e1;                                           -fx-font-size: 12px;                                           -fx-font-weight: 600;" text="Model">
                             </Label>
-                            <ComboBox fx:id="cmbModel" onAction="#handleVehicleFieldChange" prefWidth="250" promptText="Select model" style="-fx-background-color: #0f172a; -fx-text-fill: #ffffff; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8;">
+                            <ComboBox fx:id="cmbModel" prefWidth="250" promptText="Select model" style="-fx-background-color: #0f172a; -fx-text-fill: #ffffff; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8;">
                             </ComboBox>
                         </VBox>
 
@@ -82,7 +80,7 @@
                         <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1">
                             <Label style="-fx-text-fill: #cbd5e1;                                           -fx-font-size: 12px;                                           -fx-font-weight: 600;" text="Year">
                             </Label>
-                            <ComboBox fx:id="cmbYear" onAction="#handleVehicleFieldChange" prefWidth="250" promptText="Select year" style="-fx-background-color: #0f172a; -fx-text-fill: #ffffff; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8;">
+                            <ComboBox fx:id="cmbYear" prefWidth="250" promptText="Select year" style="-fx-background-color: #0f172a; -fx-text-fill: #ffffff; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8;">
                             </ComboBox>
                         </VBox>
 
@@ -90,7 +88,7 @@
                         <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <Label style="-fx-text-fill: #cbd5e1;                                           -fx-font-size: 12px;                                           -fx-font-weight: 600;" text="Engine Type">
                             </Label>
-                            <ComboBox fx:id="cmbEngineType" onAction="#handleVehicleFieldChange" prefWidth="250" promptText="Select engine" style="-fx-background-color: #0f172a; -fx-text-fill: #ffffff; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8;">
+                            <ComboBox fx:id="cmbEngineType" prefWidth="250" promptText="Select engine" style="-fx-background-color: #0f172a; -fx-text-fill: #ffffff; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8;">
                             </ComboBox>
                         </VBox>
                   <columnConstraints>
@@ -141,36 +139,26 @@
                 </VBox>
 
                 <!-- Results Section -->
-                <VBox fx:id="resultsSection" managed="false" maxWidth="800" spacing="20" style="-fx-background-color: #1e293b;                              -fx-background-radius: 12;                              -fx-padding: 30;                              -fx-border-color: #10b981;                              -fx-border-width: 2;                              -fx-border-radius: 12;" visible="false">
+                <VBox fx:id="resultsSection" managed="false" maxWidth="Infinity" spacing="20" style="-fx-background-color: #1e293b;              -fx-background-radius: 12;              -fx-padding: 30;              -fx-border-color: #10b981;              -fx-border-width: 2;              -fx-border-radius: 12;" visible="false" VBox.vgrow="ALWAYS">
 
+                    <!-- Header -->
                     <HBox alignment="CENTER_LEFT" spacing="15">
-                        <Label style="-fx-text-fill: #10b981;                                       -fx-font-size: 14px;                                       -fx-font-weight: bold;                                       -fx-letter-spacing: 1.5;" text="COMPATIBILITY RESULTS">
-                        </Label>
+                        <Label style="-fx-text-fill: #10b981;                       -fx-font-size: 14px;                       -fx-font-weight: bold;" text="COMPATIBILITY RESULTS" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Label fx:id="lblResultCount" style="-fx-text-fill: #cbd5e1;                                       -fx-font-size: 13px;                                       -fx-font-weight: 600;" text="0 parts found">
-                        </Label>
                     </HBox>
 
                     <Separator style="-fx-background-color: #334155;" />
 
-                    <!-- Results Table -->
-                    <TableView fx:id="tblResults" prefHeight="300" style="-fx-background-color: #0f172a;                                      -fx-border-color: #475569;                                      -fx-border-radius: 8;">
-                        <columns>
-                            <TableColumn fx:id="colPartName" prefWidth="220" text="Part Name" />
-                            <TableColumn fx:id="colPartType" prefWidth="140" text="Type" />
-                            <TableColumn fx:id="colCompatible" prefWidth="120" text="Compatible" />
-                            <TableColumn fx:id="colYearRange" prefWidth="150" text="Year Range" />
-                            <TableColumn fx:id="colEngineType" prefWidth="110" text="Engine" />
-                        </columns>
-                    </TableView>
+                    <!-- Result Area -->
+                    <Label fx:id="lblCompatibilityResult" maxHeight="-Infinity" maxWidth="Infinity" minHeight="-Infinity" prefHeight="200.0" style="-fx-text-fill: white; -fx-font-size: 14px;" wrapText="true" VBox.vgrow="ALWAYS" />
 
-                    <!-- Action Buttons -->
-                    <HBox alignment="CENTER" spacing="15">
-                        <Button onAction="#handleClearResults" style="-fx-background-color: transparent;                                        -fx-text-fill: #94a3b8;                                        -fx-border-color: #475569;                                        -fx-border-width: 2;                                        -fx-border-radius: 8;                                        -fx-background-radius: 8;                                        -fx-padding: 10 24;                                        -fx-cursor: hand;                                        -fx-font-size: 13px;" text="Clear Results">
-                        </Button>
+
+                    <!-- Buttons -->
+                    <HBox alignment="CENTER">
+                        <Button onAction="#handleClearResults" style="-fx-background-color: transparent;                        -fx-text-fill: #94a3b8;                        -fx-border-color: #475569;                        -fx-border-width: 2;                        -fx-border-radius: 8;                        -fx-background-radius: 8;                        -fx-padding: 10 24;                        -fx-cursor: hand;" text="Clear Results" />
                     </HBox>
-                </VBox>
 
+                </VBox>
             </VBox>
         </ScrollPane>
     </center>

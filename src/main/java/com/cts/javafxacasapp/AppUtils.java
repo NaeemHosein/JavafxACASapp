@@ -24,6 +24,8 @@
 
 package com.cts.javafxacasapp;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -35,6 +37,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
 
 
@@ -60,6 +63,7 @@ public class AppUtils {
 
     public static void hideError(Label errorLabel) {
         errorLabel.setText("");
+        errorLabel.setStyle("-fx-text-fill: #10b981; -fx-font-size: 12px;");
         errorLabel.setVisible(false);
     }
 
@@ -129,6 +133,21 @@ public class AppUtils {
 
             while (rs.next()) {
                 cmbDiagnosticCode.getItems().add(rs.getString("code"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadPartNames(ComboBox<String> cmbPartName) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+            String query = "SELECT DISTINCT part_name FROM tblparts";
+            PreparedStatement ps = db.conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cmbPartName.getItems().add(rs.getString("part_name"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -264,6 +283,29 @@ public class AppUtils {
         }
 
         return -1;
+    }
+
+    public static ObservableList<String> searchPartName(String searchText) {
+        ObservableList<String> parts = FXCollections.observableArrayList();
+
+        try {
+            DatabaseConnection dc = new DatabaseConnection();
+
+            String query = "SELECT DISTINCT part_name FROM tblparts WHERE part_name LIKE ?";
+            PreparedStatement ps = dc.conn.prepareStatement(query);
+            ps.setString(1, "%" + searchText + "%");
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                parts.add(rs.getString("part_name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return parts;
     }
 
     // -------------------------------------------------------------------------

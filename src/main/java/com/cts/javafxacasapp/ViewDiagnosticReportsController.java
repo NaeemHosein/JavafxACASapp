@@ -1,3 +1,8 @@
+/* This class lists all reports generated in the generated reports section giving mechanics
+* the ability to flag reports and give feedback if the report generated was wrong.
+* UPDATE: option to print report as pdf added
+* TODO: add more info to dtc table for more robust report*/
+
 package com.cts.javafxacasapp;
 
 import javafx.collections.FXCollections;
@@ -7,10 +12,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -18,21 +32,20 @@ import java.util.ResourceBundle;
 
 public class ViewDiagnosticReportsController implements Initializable {
 
-    // Filter controls
-    @FXML private TextField txtSearch;
-    @FXML private DatePicker dateFrom;
-    @FXML private DatePicker dateTo;
-    @FXML private ComboBox<String> cmbStatusFilter;
-
     // Table and Labels
     @FXML private Label lblReportCount;
+    @FXML private Label lblUser;
+    @FXML private Label lblRole;
     @FXML private TableView<DiagnosticReportRow> tblReports;
     @FXML private TableColumn<DiagnosticReportRow, Integer> colRuleId;
     @FXML private TableColumn<DiagnosticReportRow, String> colDate;
     @FXML private TableColumn<DiagnosticReportRow, String> colVehicle;
     @FXML private TableColumn<DiagnosticReportRow, String> colMechanic;
     @FXML private TableColumn<DiagnosticReportRow, String> colIssues;
-    @FXML private TableColumn<DiagnosticReportRow, String> colStatus;
+    @FXML private TableColumn<DiagnosticReportRow, String> colPart;
+
+    // Adding section for feedback
+    @FXML private TextArea txtFeedback;
 
     // Status Bar
     @FXML private Circle statusIndicator;
@@ -45,86 +58,68 @@ public class ViewDiagnosticReportsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         db = new DatabaseConnection();
 
-        // Setup Combo Box
-        cmbStatusFilter.setItems(FXCollections.observableArrayList("All Statuses", "Completed", "Pending"));
-        cmbStatusFilter.getSelectionModel().selectFirst();
+        // getting and displaying session user and role info
+        SessionManager session = SessionManager.getInstance();
+        lblUser.setText("User: " + session.getUsername());
+        lblRole.setText("Role: " + session.getUserRole());
 
-        // Map Table Columns to the Data Model properties
+        // mapping table columns
         colRuleId.setCellValueFactory(new PropertyValueFactory<>("reportId"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colVehicle.setCellValueFactory(new PropertyValueFactory<>("vehicle"));
         colMechanic.setCellValueFactory(new PropertyValueFactory<>("mechanic"));
+        colPart.setCellValueFactory(new PropertyValueFactory<>("faultyPart"));
         colIssues.setCellValueFactory(new PropertyValueFactory<>("issues"));
-        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        // Initial Database load
-        loadReports(null, null, null, "All Statuses");
-
-        // Selection listener for status bar updates
-        tblReports.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                updateStatus("Selected Report ID: " + newSelection.getReportId(), Color.web("#3b82f6")); // Blue
-            }
-        });
+        // populating tables with reports from session user
+        loadReports(null, null, null);
     }
 
-    /**
-     * Connects to the database and fetches the joined data. Applies filtering in-memory
-     * so that search strings, dates, and status filters work cleanly with UI updates.
-     */
-    private void loadReports(String search, LocalDate start, LocalDate end, String statusFilter) {
+    // connects to database and pulls data from report table other tables foreign keys in reports table
+    private void loadReports(String search, LocalDate start, LocalDate end) {
         reportList.clear();
-        try {
-            // Join reports across Vehicles, Mechanics, and Code tables using info from DatabaseConnection.java
-            String sql = "SELECT r.report_id, r.report_date, v.year, v.vehicle_make, v.vehicle_model, " +
-                    "m.full_name AS mechanic_name, c.description AS issue, r.flag " +
-                    "FROM tbldiagnostic_reports r " +
-                    "JOIN tblvehicles v ON r.vehicle_id = v.vehicle_id " +
-                    "JOIN tblmechanic m ON r.mechanic_id = m.mechanic_id " +
-                    "JOIN tbldiagnostic_codes c ON r.code_id = c.code_id";
 
-            ResultSet rs = db.conn.createStatement().executeQuery(sql);
+        try {
+            SessionManager session = SessionManager.getInstance();
+            int mechanicId = AppUtils.getUserId(session.getUsername(), session.getUserRole());
+
+            String sql =
+                    "SELECT r.report_id, r.report_date, r.flag, " +
+                            "v.year, v.vehicle_make, v.vehicle_model, " +
+                            "m.full_name AS mechanic_name, " +
+                            "c.description AS issue, c.faulty_part " +
+                            "FROM tbldiagnostic_reports r " +
+                            "JOIN tblvehicles v ON r.vehicle_id = v.vehicle_id " +
+                            "JOIN tblmechanic m ON r.mechanic_id = m.mechanic_id " +
+                            "JOIN tbldiagnostic_codes c ON r.code_id = c.code_id " +
+                            "WHERE r.mechanic_id = ?";
+
+            PreparedStatement ps = db.conn.prepareStatement(sql);
+            ps.setInt(1, mechanicId);
+
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("report_id");
-                String dateRaw = rs.getString("report_date"); // DATETIME like '2023-01-01 10:00:00'
-                String vehicle = rs.getInt("year") + " " + rs.getString("vehicle_make") + " " + rs.getString("vehicle_model");
+                String dateRaw = rs.getString("report_date");
+
+                String vehicle = rs.getInt("year") + " " +
+                        rs.getString("vehicle_make") + " " +
+                        rs.getString("vehicle_model");
+
                 String mechanic = rs.getString("mechanic_name");
                 String issue = rs.getString("issue");
+                String faultyPart = rs.getString("faulty_part");
+
                 int flag = rs.getInt("flag");
 
-                // Assuming flag 1 represents a Completed report, mapping 0 to Pending
-                String status = (flag == 1) ? "Completed" : "Pending";
+                String status = (flag == 1) ? "Flagged" : "OK";
 
-                // Filter logic
-                boolean matchSearch = true;
-                if (search != null && !search.trim().isEmpty()) {
-                    String lowerSearch = search.toLowerCase();
-                    matchSearch = vehicle.toLowerCase().contains(lowerSearch) || issue.toLowerCase().contains(lowerSearch);
-                }
+                String uiDate = dateRaw.substring(0, 10);
 
-                boolean matchStatus = true;
-                if (statusFilter != null && !statusFilter.equals("All Statuses")) {
-                    matchStatus = status.equals(statusFilter);
-                }
-
-                boolean matchDate = true;
-                if ((start != null || end != null) && dateRaw != null && dateRaw.length() >= 10) {
-                    try {
-                        LocalDate rowDate = LocalDate.parse(dateRaw.substring(0, 10)); // Extract 'YYYY-MM-DD'
-                        if (start != null && rowDate.isBefore(start)) matchDate = false;
-                        if (end != null && rowDate.isAfter(end)) matchDate = false;
-                    } catch (Exception e) {
-                        // ignore malformed dates
-                    }
-                }
-
-                // Only add if all filters match
-                if (matchSearch && matchStatus && matchDate) {
-                    // Extract just the Date portion for the UI table
-                    String uiDate = (dateRaw != null && dateRaw.length() > 10) ? dateRaw.substring(0,10) : dateRaw;
-                    reportList.add(new DiagnosticReportRow(id, uiDate, vehicle, mechanic, issue, status));
-                }
+                reportList.add(new DiagnosticReportRow(
+                        id, uiDate, vehicle, mechanic, issue, faultyPart, status
+                ));
             }
 
             tblReports.setItems(reportList);
@@ -132,85 +127,187 @@ public class ViewDiagnosticReportsController implements Initializable {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            updateStatus("Failed to load reports: " + e.getMessage(), Color.web("#ef4444"));
+            AppUtils.showError(lblStatus, "Failed to load reports");
         }
     }
 
-    // ==== ACTION HANDLERS ====
+    // defining handlers from fxml file
 
     @FXML
-    private void handleBack(ActionEvent event) {
-        AppUtils.navigateToDashboard(event);
-    }
+    private void handleFlagReport(ActionEvent event) {
 
-    @FXML
-    private void handleSearch(ActionEvent event) {
-        String search = txtSearch.getText();
-        LocalDate start = dateFrom.getValue();
-        LocalDate end = dateTo.getValue();
-        String status = cmbStatusFilter.getValue();
-
-        loadReports(search, start, end, status);
-        updateStatus("Filters applied. Found " + reportList.size() + " entries.", Color.web("#10b981"));
-    }
-
-    @FXML
-    private void handleClearFilters(ActionEvent event) {
-        txtSearch.clear();
-        dateFrom.setValue(null);
-        dateTo.setValue(null);
-        cmbStatusFilter.getSelectionModel().selectFirst();
-
-        loadReports(null, null, null, "All Statuses");
-        updateStatus("Filters cleared.", Color.web("#10b981"));
-    }
-
-    @FXML
-    private void handleViewSelected(ActionEvent event) {
         DiagnosticReportRow selected = tblReports.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            updateStatus("Opening detailed view for Report ID: " + selected.getReportId(), Color.web("#10b981"));
-            // Custom dialog popup or scene change code goes here
-        } else {
-            updateStatus("Please select a report to view from the table.", Color.web("#ef4444")); // Red Error
+
+        if (selected == null) {
+            AppUtils.showError(lblStatus,"Please select a report to flag.");
+            return;
+        }
+
+        String feedback = txtFeedback.getText();
+
+        if (feedback == null || feedback.trim().isEmpty()) {
+            AppUtils.showError(lblStatus,"Please enter feedback before flagging.");
+            return;
+        }
+
+        try {
+            String query = "UPDATE tbldiagnostic_reports SET flag = 1, feedback = ? WHERE report_id = ?";
+            PreparedStatement ps = db.conn.prepareStatement(query);
+
+            ps.setString(1, feedback);
+            ps.setInt(2, selected.getReportId());
+
+            ps.executeUpdate();
+
+            lblStatus.setText("Report flagged successfully.");
+
+            loadReports(null, null, null);
+            txtFeedback.clear();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AppUtils.showError(lblStatus,"Error flagging report.");
         }
     }
 
     @FXML
     private void handlePrintPDF(ActionEvent event) {
         DiagnosticReportRow selected = tblReports.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            updateStatus("Generating PDF for Report ID: " + selected.getReportId() + "...", Color.web("#3b82f6"));
-            // Add PDF generation code here (e.g., using iText or PDFBox)
-        } else {
-            updateStatus("Please select a report to export to PDF.", Color.web("#ef4444"));
+
+        if (selected == null) {
+            AppUtils.showError(lblStatus,"Please select a report to export.");
+            return;
+        }
+
+        try (PDDocument doc = new PDDocument()) {
+            PDPage page = new PDPage();
+            doc.addPage(page);
+
+            try (PDPageContentStream content = new PDPageContentStream(doc, page)) {
+                float y = 750; // using to track cursor positioning on doc
+
+
+                //adding logo to top left
+
+                InputStream logoStream = getClass().getResourceAsStream("/img/ACAS.png");
+                if (logoStream != null) {
+                    PDImageXObject logo = PDImageXObject.createFromByteArray(doc, logoStream.readAllBytes(), "ACAS-logo");
+
+                    content.drawImage(logo, 50, 700, 100, 100);
+                }
+
+                //setting title
+                content.beginText();
+                content.setFont(PDType1Font.HELVETICA_BOLD, 18);
+                content.newLineAtOffset(200, y -90);
+                content.showText("ACAS Diagnostic Report");
+                content.endText();
+
+                y -= 150;
+
+                //adding guideline for more realistic report pdf
+                content.beginText();
+                content.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                content.newLineAtOffset(50, y);
+                content.showText("General Guidelines- Using your Report Details");
+                content.endText();
+
+                y -= 15;
+
+
+                content.beginText();
+                content.setFont(PDType1Font.HELVETICA, 10);
+                content.setLeading(14f);
+                content.newLineAtOffset(50, y);
+                content.showText("ACAS codes are verified accross manufacturer standards making it the perfect tool for your diagnostic needs.");
+                content.newLine();
+                content.showText("Please use the report along with our compatibility checker to ensure correct parts are used for vehicle compatibility.");
+                content.newLine();
+                content.showText("Remember to perform a final inspection before returning vehicle to customer.");
+                content.endText();
+
+                y -= 175;
+
+                // creating table with report
+                content.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                drawRow(content, y, "Field", "Details");
+                y -= 20;
+
+                content.setFont(PDType1Font.HELVETICA, 11);
+
+
+                y = drawRow(content, y, "Report ID", String.valueOf(selected.getReportId()));
+                y = drawRow(content, y, "Date", selected.getDate());
+                y = drawRow(content, y, "Vehicle", selected.getVehicle());
+                y = drawRow(content, y, "Mechanic", selected.getMechanic());
+                y = drawRow(content, y, "Issue", selected.getIssues());
+                y = drawRow(content, y, "Faulty Part", selected.getFaultyPart());
+
+
+                y -= 40;
+
+                //adding disclaimer to footer
+                content.beginText();
+                content.setFont(PDType1Font.HELVETICA_OBLIQUE, 9);
+                content.setLeading(12f);
+                content.newLineAtOffset(50, 80);
+
+
+                content.showText("Disclaimer: This report was generated based on available diagnostic data.");
+                content.newLine();
+                content.showText("The ACAS team and managing partners are not liable for incorrect manual inputs or external modifications");
+                content.newLine();
+                content.showText("and damage caused by improper use of our system.");
+                content.newLine();
+                content.showText("Generated by ACAS © 2026");
+                content.endText();
+            }
+
+            // adding fail safe for windows users whose desktop is under onedrive and general fallback to docs folder
+            Path desktop = Paths.get(System.getProperty("user.home"), "Desktop");
+            if (!Files.exists(desktop)) {
+                Path oneDriveDesktop = Paths.get(System.getProperty("user.home"), "OneDrive", "Desktop");
+                if (Files.exists(oneDriveDesktop)) {
+                    desktop = oneDriveDesktop;
+                } else {
+                    // Fallback to Documents if neither Desktop exists
+                    desktop = Paths.get(System.getProperty("user.home"), "Documents");
+                }
+            }
+
+            Path file = desktop.resolve("Report_" + selected.getReportId() + ".pdf");
+            System.out.println("Saving PDF to: " + file.toAbsolutePath());
+
+            doc.save(file.toFile());
+            lblStatus.setText("PDF saved to Desktop.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            AppUtils.showError(lblStatus,"Error generating PDF: " + e.getMessage());
         }
     }
 
-    private void updateStatus(String message, Color color) {
-        if (lblStatus != null) lblStatus.setText(message);
-        if (statusIndicator != null) statusIndicator.setFill(color);
-    }
 
-    // ==== DATA MODEL ====
 
-    /**
-     * View-specific data model that combines Vehicle, Mechanic, and Code data
-     */
+    // subclass to get data for table view and generating pdf
+
     public static class DiagnosticReportRow {
         private int reportId;
         private String date;
         private String vehicle;
         private String mechanic;
         private String issues;
+        private String faultyPart;
         private String status;
 
-        public DiagnosticReportRow(int reportId, String date, String vehicle, String mechanic, String issues, String status) {
+        public DiagnosticReportRow(int reportId, String date, String vehicle,
+                                   String mechanic, String issues,
+                                   String faultyPart, String status) {
             this.reportId = reportId;
             this.date = date;
             this.vehicle = vehicle;
             this.mechanic = mechanic;
             this.issues = issues;
+            this.faultyPart = faultyPart;
             this.status = status;
         }
 
@@ -219,6 +316,31 @@ public class ViewDiagnosticReportsController implements Initializable {
         public String getVehicle() { return vehicle; }
         public String getMechanic() { return mechanic; }
         public String getIssues() { return issues; }
+        public String getFaultyPart() { return faultyPart; }
         public String getStatus() { return status; }
+    }
+
+    //helper for generating pdf tables
+    private float drawRow(PDPageContentStream content, float y, String col1, String col2) throws Exception {
+
+        content.beginText();
+        content.setFont(PDType1Font.HELVETICA, 11);
+        content.newLineAtOffset(50, y);
+        content.showText(col1 + ":");
+        content.endText();
+
+        content.beginText();
+        content.setFont(PDType1Font.HELVETICA, 11);
+        content.newLineAtOffset(200, y);
+        content.showText(col2);
+        content.endText();
+
+        return y - 18;
+    }
+
+    //defining back button
+    @FXML
+    private void handleBack(ActionEvent event) {
+        AppUtils.navigateToDashboard(event);
     }
 }

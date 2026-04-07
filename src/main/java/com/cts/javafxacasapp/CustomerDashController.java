@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.cts.javafxacasapp.AppUtils.showError;
+
 
 public class CustomerDashController implements Initializable {
 
@@ -85,7 +85,7 @@ public class CustomerDashController implements Initializable {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-part-compatibility.fxml", 1100, 750);
         } catch (Exception e) {
-            showError();
+            AppUtils.showError(lblStatus, "Something went wrong");
             e.printStackTrace();
         }
     }
@@ -95,7 +95,7 @@ public class CustomerDashController implements Initializable {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-rate-application.fxml", 1100, 750);
         } catch (Exception e) {
-            showError();
+            AppUtils.showError(lblStatus, "Something went wrong");
             e.printStackTrace();
         }
     }
@@ -104,13 +104,12 @@ public class CustomerDashController implements Initializable {
         try {
             JavafxACASapp.changeScene("javafx-ACAS-app-view.fxml", 1100, 750);
         } catch (Exception e) {
-            showError();
+            AppUtils.showError(lblStatus, "Something went wrong");
             e.printStackTrace();
         }
     }
 
-    private void showError() {
-    }
+
 
     // Public API (call from other controllers)
 

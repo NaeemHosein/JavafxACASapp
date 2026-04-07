@@ -113,7 +113,7 @@ public class LoginController {
                     JavafxACASapp.changeScene("javafx-ACAS-app-dash.fxml", 1100, 750);
                 }
                 else if (selectedToggle == guestBtn) {
-                    SessionManager.getInstance().setUserRole("customer");
+                    SessionManager.getInstance().setUserRole("owner");
                     SessionManager.getInstance().setUsername(username);
                     JavafxACASapp.changeScene("javafx-ACAS-app-customer-dash.fxml", 1100, 750);
                 }
