@@ -3,6 +3,7 @@
  * Status label is updated with real time error catching and uses appUtil methods
  * TO DO: integrate session class so that username and role is stored and passed through
  * Update: added check part compatibility feature for mechanics as well
+ * Update: added rate application feature to mechanic dashboard as well
  */
 
 package com.cts.javafxacasapp;
@@ -55,6 +56,17 @@ public class DashboardController {
         }
     }
 
+    // rate application opens rate screen ui
+    @FXML
+    private void handleRateApplication() {
+        try {
+            JavafxACASapp.changeScene("javafx-ACAS-app-mechanic-rate-application.fxml", 1100, 750);
+        } catch (Exception e) {
+            AppUtils.showError(lblStatus, "Something went wrong");
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private void handlePartCheck(MouseEvent event) {
         try {
@@ -64,6 +76,10 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void handleUserGuide(MouseEvent event) {
+        AppUtils.openPDF("/docs/ACAS_mechanicManual.pdf");  }
 
 
     @FXML

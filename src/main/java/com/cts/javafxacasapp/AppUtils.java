@@ -19,6 +19,7 @@
  * getUserId(username, role) - grabbing userID using username and role stored in session manager
  * getCodeId(code) - grabs code ID from dtc table for code in parameter
  * saveRating(username, rating, feedback) - saves rating to session (customer) user table and returns true when successful
+ *saveMechanicRating(username, rating, feedback) - saves rating to session (mechanic) user table and returns true when successful
  *
  * Navigation Helpers:
  * navigateToDashboard(ActionEvent event) - navigate to customer, mechanic or admin dashboard based on user role
@@ -42,6 +43,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 
 public class AppUtils {
@@ -382,6 +387,32 @@ public class AppUtils {
         return false;
     }
 
+    public static boolean saveMechanicRating(String username, int rating, String feedback) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+
+            String query = """
+                UPDATE tblmechanic
+                SET rating = ?, feedback = ?
+                WHERE username = ?
+                """;
+
+            PreparedStatement ps = db.conn.prepareStatement(query);
+            ps.setInt(1, rating);
+            ps.setString(2, feedback);
+            ps.setString(3, username);
+
+            int rows = ps.executeUpdate();
+
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     // -------------------------------------------------------------------------
     // Navigation Helpers
     // -------------------------------------------------------------------------
@@ -426,6 +457,32 @@ public class AppUtils {
         try {
             SessionManager.clearSession();
             JavafxACASapp.changeScene("javafx-ACAS-app-view.fxml", 1100, 750);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //helper to open pdfs (for manuals)
+    public static void openPDF(String resourcePath) {
+        try {
+            InputStream is = AppUtils.class.getResourceAsStream(resourcePath);
+
+            if (is == null) {
+                System.out.println("❌ PDF not found: " + resourcePath);
+                return;
+            }
+
+            // Create temp file
+            File tempFile = File.createTempFile("manual", ".pdf");
+            tempFile.deleteOnExit();
+
+            Files.copy(is, tempFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+            // Open with system default PDF viewer
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(tempFile);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

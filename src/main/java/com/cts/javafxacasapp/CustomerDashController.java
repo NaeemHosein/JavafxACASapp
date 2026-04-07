@@ -127,6 +127,11 @@ public class CustomerDashController implements Initializable {
     }
 
     @FXML
+    private void handleUserGuide(MouseEvent event) {
+        AppUtils.openPDF("/docs/ACAS_customerManual.pdf");     }
+
+
+    @FXML
     private void handleLogout() {
         AppUtils.Logout();
     }

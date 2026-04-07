@@ -1,6 +1,7 @@
-/*Stores customer rating in feedback and rating column of veicle owner table
-*Update: feedback and rating fields added to vehicle owner table
-* Update: method added to app utils to handle adding feedback and rating to table */
+/*Morphing Customer rate application into rate screen for Mechanic as well
+*Stores mechanic rating in feedback and rating column of vehicle owner table
+*Update: feedback and rating fields added to mechanic table
+*Update: method added to app utils to handle adding feedback and rating to table (this is the only major change to code (yayy!!:) */
 
 package com.cts.javafxacasapp;
 
@@ -10,14 +11,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class RateAppController implements Initializable {
+public class MechanicRateAppController implements Initializable {
 
     //defining fxml tags
 
@@ -88,12 +88,12 @@ public class RateAppController implements Initializable {
         SessionManager session = SessionManager.getInstance();
         String username = session.getUsername();
 
-        boolean success = AppUtils.saveRating(username, selectedRating, feedback);
+        boolean success = AppUtils.saveMechanicRating(username, selectedRating, feedback);
 
         if (success) {
             lblStatus.setText("Thank you! Your rating has been submitted.");
 
-            // return to customer dashboard after submitting if successful
+            // return to mechanic dashboard after submitting if successful
             AppUtils.navigateToDashboard(event);
 
         } else {

@@ -26,8 +26,6 @@
             </VBox>
 
             <Region HBox.hgrow="ALWAYS" />
-
-            <Label fx:id="lblUser" style="-fx-text-fill: #cbd5e1;                           -fx-font-size: 13px;" text="" />
          <Label fx:id="lblUser" style="-fx-text-fill: #cbd5e1;                           -fx-font-size: 13px;" text="Guest User" />
          <Label fx:id="lblRole" style="-fx-text-fill: #cbd5e1;                           -fx-font-size: 13px;" text="Role" />
         </HBox>

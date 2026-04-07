@@ -111,7 +111,9 @@ public class DatabaseConnection  {
                             email VARCHAR(50) NOT NULL,
                             business_name VARCHAR(50),
                             years_experience INT NOT NULL,
-                            phone_number VARCHAR(14) NOT NULL)
+                            phone_number VARCHAR(14) NOT NULL,
+                            rating INT(1),
+                            feedback TEXT)
                     """);
 
             // building vehicle owner table
