@@ -50,7 +50,8 @@ public class PartCompatibilityController {
     //initializing session
     @FXML
     public void initialize() {
-
+        //populating part combobox
+        AppUtils.loadPartNames(cmbPartName);
 
         //getting username and role for display
         SessionManager session = SessionManager.getInstance();
