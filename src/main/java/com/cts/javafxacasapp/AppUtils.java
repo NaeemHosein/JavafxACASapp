@@ -15,6 +15,7 @@
  * getVehicleId(db, username)- get vehicle id for logged in customer
  * getVehicleDetails( db, vehicleId)- get vehicle make, model, year and engine type from vehicleid
  * loadDiagnosticCodes(cmbDiagnosticCode) - loads DTC for combo box
+ * ObservableList<String> searchPartName(searchText) - performing a like sql query to get all parts with similar name to part typed
  * findDTC(code) - checks if DTC is in the system
  * getUserId(username, role) - grabbing userID using username and role stored in session manager
  * getCodeId(code) - grabs code ID from dtc table for code in parameter
@@ -349,7 +350,7 @@ public class AppUtils {
 
             String query = "SELECT DISTINCT part_name FROM tblparts WHERE part_name LIKE ?";
             PreparedStatement ps = dc.conn.prepareStatement(query);
-            ps.setString(1, "%" + searchText + "%");
+            ps.setString(1, "%" + searchText + "%"); // searches for parts with any semblance of the words/letters provided in that order with whatever else coming before or after
 
             ResultSet rs = ps.executeQuery();
 
