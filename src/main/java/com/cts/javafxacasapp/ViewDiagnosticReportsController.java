@@ -1,6 +1,6 @@
 /* This class lists all reports generated in the generated reports section giving mechanics
 * the ability to flag reports and give feedback if the report generated was wrong.
-* UPDATE: option to print report as pdf added
+* UPDATE: option to print export as pdf added
 * TODO: add more info to dtc table for more robust report*/
 
 package com.cts.javafxacasapp;
@@ -205,7 +205,7 @@ public class ViewDiagnosticReportsController implements Initializable {
 
                 y -= 150;
 
-                //adding guideline for more realistic report pdf
+                //adding guidelines for more realistic report pdf
                 content.beginText();
                 content.setFont(PDType1Font.HELVETICA_BOLD, 12);
                 content.newLineAtOffset(50, y);
@@ -263,23 +263,23 @@ public class ViewDiagnosticReportsController implements Initializable {
                 content.endText();
             }
 
-            // adding fail safe for windows users whose desktop is under onedrive and general fallback to docs folder
-            Path desktop = Paths.get(System.getProperty("user.home"), "Desktop");
-            if (!Files.exists(desktop)) {
-                Path oneDriveDesktop = Paths.get(System.getProperty("user.home"), "OneDrive", "Desktop");
+            // adding fail safe for windows users whose downloads folder is under onedrive and general fallback to user desktop if all fails
+            Path downloads = Paths.get(System.getProperty("user.home"), "Downloads");
+            if (!Files.exists(downloads)) {
+                Path oneDriveDesktop = Paths.get(System.getProperty("user.home"), "OneDrive", "Downloads");
                 if (Files.exists(oneDriveDesktop)) {
-                    desktop = oneDriveDesktop;
+                    downloads = oneDriveDesktop;
                 } else {
-                    // Fallback to Documents if neither Desktop exists
-                    desktop = Paths.get(System.getProperty("user.home"), "Documents");
+                    // fallback to desktop if neither location of downloads folder exists
+                    downloads = Paths.get(System.getProperty("user.home"), "Desktop");
                 }
             }
 
-            Path file = desktop.resolve("Report_" + selected.getReportId() + ".pdf");
+            Path file = downloads.resolve("Report_" + selected.getReportId() + ".pdf");
             System.out.println("Saving PDF to: " + file.toAbsolutePath());
 
             doc.save(file.toFile());
-            lblStatus.setText("PDF saved to Desktop.");
+            lblStatus.setText("PDF saved to Downloads.");
         } catch (Exception e) {
             e.printStackTrace();
             AppUtils.showError(lblStatus,"Error generating PDF: " + e.getMessage());
@@ -288,7 +288,7 @@ public class ViewDiagnosticReportsController implements Initializable {
 
 
 
-    // subclass to get data for table view and generating pdf
+    // subclass to get data for table view and generating pdf, use of getter and setter methods for data integrity
 
     public static class DiagnosticReportRow {
         private int reportId;

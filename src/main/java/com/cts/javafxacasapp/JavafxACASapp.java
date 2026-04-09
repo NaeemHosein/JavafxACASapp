@@ -36,7 +36,7 @@ public class JavafxACASapp extends Application {
 
         Scene scene = new Scene(fxmlLoader.load());
 
-        primaryStage.setTitle("ACAS - Automotive Component Advisory System: User Login");
+        primaryStage.setTitle("ACAS - Automotive Component Advisory System");
         primaryStage.setScene(scene);
 
         // This allows resizing.
@@ -96,7 +96,7 @@ public class JavafxACASapp extends Application {
                 currentStg.setTitle("ACAS - Generate Diagnostic Report");
                 break;
 
-            case "manage-rules-view.fxml":
+            case "javafx-ACAS-app-system-config.fxml":
                 currentStg.setTitle("ACAS - Manage Diagnostic Rules");
                 break;
 

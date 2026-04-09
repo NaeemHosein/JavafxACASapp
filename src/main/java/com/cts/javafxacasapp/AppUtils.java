@@ -20,6 +20,11 @@
  * getCodeId(code) - grabs code ID from dtc table for code in parameter
  * saveRating(username, rating, feedback) - saves rating to session (customer) user table and returns true when successful
  *saveMechanicRating(username, rating, feedback) - saves rating to session (mechanic) user table and returns true when successful
+ *resolveReport(reportId)- sets flagged reports back to unflagged (0) and returns true when done and false when not so admin can remove already addressed issues from their list
+ * saveDTC(id, code, description, resolution, part)- saves dtc code info to dtc table
+ * savePart( id, name, type, make) - saves part info in part table
+ * saveVehicle( id, make, model, year)- saves info in vehicle table
+ * deleteRecord(table, id) - deletes records from dtc, vehicle and parts table currently to be updated to do other tables in future
  *
  * Navigation Helpers:
  * navigateToDashboard(ActionEvent event) - navigate to customer, mechanic or admin dashboard based on user role
@@ -413,9 +418,127 @@ public class AppUtils {
         return false;
     }
 
-    // -------------------------------------------------------------------------
+    public static boolean resolveReport(int reportId) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+
+            String query = "UPDATE tbldiagnostic_reports SET flag = 0 WHERE report_id = ?";
+
+            PreparedStatement ps = db.conn.prepareStatement(query);
+            ps.setInt(1, reportId);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+   // generic load table method for admin system config todo: use this method to load other tables in app!
+    public static void loadTable(TableView<ObservableList<String>> table, String query) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+            ResultSet rs = db.conn.createStatement().executeQuery(query);
+
+            ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
+
+            while (rs.next()) {
+                ObservableList<String> row = FXCollections.observableArrayList();
+
+                for (int i = 1; i <= 4; i++) {
+                    row.add(rs.getString(i));
+                }
+
+                data.add(row);
+            }
+
+            table.setItems(data);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean saveDTC(int id, String code, String description, String resolution, String part) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+
+            String query = (id == -1)
+                    ? "INSERT INTO tbldiagnostic_codes (code, description, resolution, faulty_part) VALUES (?,?,?,?)"
+                    : "UPDATE tbldiagnostic_codes SET code=?, description=?, resolution=?, faulty_part=? WHERE code_id=?";
+
+            var ps = db.conn.prepareStatement(query);
+            ps.setString(1, code);
+            ps.setString(2, description);
+            ps.setString(3, resolution);
+            ps.setString(4, part);
+
+            if (id != -1) ps.setInt(5, id);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) { e.printStackTrace(); }
+
+        return false;
+    }
+
+
+
+
+    public static boolean saveVehicle(int id, String make, String model, String engine, String year) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+
+            String sql;
+
+            if (id == -1) {
+                sql = "INSERT INTO tblvehicles (vehicle_make, vehicle_model, engine_type, year) VALUES (?, ?, ?, ?)";
+            } else {
+                sql = "UPDATE tblvehicles SET vehicle_make=?, vehicle_model=?, engine_type=?, year=? WHERE vehicle_id=?";
+            }
+
+            PreparedStatement ps = db.conn.prepareStatement(sql);
+            ps.setString(1, make);
+            ps.setString(2, model);
+            ps.setString(3, engine);
+            ps.setInt(4, Integer.parseInt(year));
+
+            if (id != -1) ps.setInt(5, id);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // todo: implement for other tables when needed for future upgrades!!!
+    public static boolean deleteRecord(String table, int id) {
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+
+            String query = switch (table) {
+                case "DTC" -> "DELETE FROM tbldiagnostic_codes WHERE code_id=?";
+                case "PARTS" -> "DELETE FROM tblparts WHERE part_id=?";
+                case "VEHICLES" -> "DELETE FROM tblvehicles WHERE vehicle_id=?";
+                default -> null;
+            };
+
+            var ps = db.conn.prepareStatement(query);
+            ps.setInt(1, id);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) { e.printStackTrace(); }
+
+        return false;
+    }
+
     // Navigation Helpers
-    // -------------------------------------------------------------------------
 
     public static void navigateToDashboard(ActionEvent event) {
         String role = SessionManager.getInstance().getUserRole();
