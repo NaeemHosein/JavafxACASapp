@@ -22,11 +22,11 @@ public class SystemConfigController implements Initializable {
     @FXML private TextField txtField4;
     @FXML private TextField txtField5;
 
-    @FXML private TextField lbl1;
-    @FXML private TextField lbl2;
-    @FXML private TextField lbl3;
-    @FXML private TextField lbl4;
-    @FXML private TextField lbl5;
+    @FXML private Label lbl1;
+    @FXML private Label lbl2;
+    @FXML private Label lbl3;
+    @FXML private Label lbl4;
+    @FXML private Label lbl5;
     @FXML private Label lblStatus;
     @FXML private Label lblUser;
     @FXML private Label lblRole;

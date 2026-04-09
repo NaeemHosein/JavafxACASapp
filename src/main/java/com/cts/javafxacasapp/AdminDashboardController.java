@@ -15,12 +15,13 @@ public class AdminDashboardController {
 
 
     //setting up dashboard
-    public void initialize(String username, String role) {
+    public void initialize() {
 
         //getting username for display
         SessionManager session = SessionManager.getInstance();
+        System.out.println("Session username: " + session.getUsername());
 
-        lblWelcome.setText("Welcome, " + username);
+        lblWelcome.setText("Welcome, " + session.getUsername());
 
 
         // Set connection status
