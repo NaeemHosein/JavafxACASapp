@@ -29,7 +29,7 @@ public class LoginController {
 
     @FXML private ToggleGroup roleToggleGroup;
 
-
+// manually adding some css styling for buttons
     private static final String DEFAULT_STYLE =
             "-fx-background-color: #1a2235; -fx-border-color: #2a3650; " +
                     "-fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; " +
@@ -39,6 +39,8 @@ public class LoginController {
             "-fx-background-color: #1a2235; -fx-border-color: #cc2200; " +
                     "-fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8; " +
                     "-fx-text-fill: #ffffff; -fx-font-size: 13px; -fx-cursor: hand;";
+
+   // initializing UI
     @FXML
     public void initialize() {
         mechanicBtn.setStyle(DEFAULT_STYLE);
@@ -58,6 +60,7 @@ public class LoginController {
 
     }
 
+    //defining login logic
     @FXML
     private void handleLogin() {
         String username = usernameField.getText().trim();
@@ -73,6 +76,7 @@ public class LoginController {
             return;
         }
 
+        //adding info to appropiate table based on button selected
         String tableName;
 
         if (selectedToggle == adminBtn) {
@@ -98,6 +102,7 @@ public class LoginController {
 
             ResultSet rs = ps.executeQuery();
 
+            //switching to relevant dashboard if login successful and establishing session logic
             if (rs.next()) {
                 AppUtils.hideError(errorLabel);
                 System.out.println("Login successful");
@@ -131,6 +136,8 @@ public class LoginController {
         }
     }
 
+
+    //switching to registration pages if buttons clicked
     @FXML
     private void handleRegisterMechanic() {
         try {

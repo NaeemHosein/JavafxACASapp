@@ -34,7 +34,7 @@ public class DatabaseConnection  {
         createConnection(); createTables(); populateTables();
     }
 
-    //--------------------------------------------------------------------------
+
     /*
      *Connection information for the MYSQL database on server
      *@exception Exception:if no connection was found.

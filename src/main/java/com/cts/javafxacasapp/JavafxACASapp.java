@@ -1,6 +1,6 @@
-
+/*Main class responsible for launching the app login page
+* contains metjods to change scene, the db connectivity and load app icon*/
 // TODO: UPDATE HEADERS FOR EACH PAGE
-// UPDATE PRINT LN STATEMENTS TO PRINT SAMPLE USERNAMES ANS PASSWORDS
 // CREATE README FILE*/
 
 package com.cts.javafxacasapp;
@@ -62,12 +62,6 @@ public class JavafxACASapp extends Application {
             dc.rst = dc.stat.executeQuery(query);
 
             System.out.println("=== Database Connection Successful ===");
-            System.out.println("Users in database:");
-            while(dc.rst.next()) {
-                System.out.print("ID: " + dc.rst.getInt("admin_id"));
-
-            }
-            System.out.println("=====================================");
         } catch (SQLException e) {
             // Log the exception using the Java logger
             logger.severe("An error occurred: Database connectivity failed");
@@ -87,9 +81,21 @@ public class JavafxACASapp extends Application {
             case "javafx-ACAS-app-admin-dash.fxml":
                 currentStg.setTitle("ACAS - Administrator Dashboard");
                 break;
+            case "javafx-ACAS-app-customer-dash.fxml":
+                currentStg.setTitle("ACAS - Customer Dashboard");
+                break;
+            case "javafx-ACAS-app-mechanic-part-compatibility.fxml":
+                currentStg.setTitle("ACAS - Part Compatibility Checker");
+                break;
 
             case "javafx-ACAS-app-part-compatibility.fxml":
                 currentStg.setTitle("ACAS - Part Compatibility Checker");
+                break;
+            case "javafx-ACAS-app-mechanic-rate-application.fxml":
+                currentStg.setTitle("ACAS - Rate Application");
+                break;
+            case "javafx-ACAS-app-rate-application.fxml":
+                currentStg.setTitle("ACAS - Rate Application");
                 break;
 
             case "javafx-ACAS-app-diagnostic.fxml":
@@ -106,6 +112,15 @@ public class JavafxACASapp extends Application {
 
             case"javafx-ACAS-app-customer-register.fxml":
                 currentStg.setTitle("ACAS - Customer Registration");
+                break;
+            case"javafx-ACAS-app-mechanic-register.fxml":
+                currentStg.setTitle("ACAS - Mechanic Registration");
+                break;
+            case"javafx-ACAS-app-view-issue-report.fxml":
+                currentStg.setTitle("ACAS - Review Feedback");
+                break;
+            case"javafx-ACAS-app-view-reports.fxml":
+                currentStg.setTitle("ACAS - View and Export Dianostic Report");
                 break;
         }
 

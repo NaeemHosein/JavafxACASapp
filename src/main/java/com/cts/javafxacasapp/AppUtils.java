@@ -56,9 +56,8 @@ import java.nio.file.Files;
 
 public class AppUtils {
 
-    // -------------------------------------------------------------------------
+
     // UI Helpers
-    // -------------------------------------------------------------------------
 
     public static void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -80,9 +79,8 @@ public class AppUtils {
         errorLabel.setVisible(false);
     }
 
-    // -------------------------------------------------------------------------
+
     // Database Helpers
-    // -------------------------------------------------------------------------
 
     public static void loadMakes(ComboBox<String> cmbMake) {
         try {

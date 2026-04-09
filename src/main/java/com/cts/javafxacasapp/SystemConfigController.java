@@ -112,7 +112,7 @@ public class SystemConfigController implements Initializable {
                 txtField3.setText(field.get(2));
                 txtField4.setText(field.get(3));
 
-                btnSaveChanges.setText("Update Record");
+                btnSaveChanges.setText("Update Record"); //text switches to update record when a record is clicked
 
 
                 if (currentTable.equals("DTC")) {
@@ -156,7 +156,7 @@ public class SystemConfigController implements Initializable {
         }
     }
 
-    // ================= SAVE =================
+    //using AppUtils methods to handle sql queries for saving info to dtc and vehicle table
 
     @FXML
     private void handleSaveChanges(ActionEvent e) {
@@ -167,7 +167,7 @@ public class SystemConfigController implements Initializable {
 
             success = AppUtils.saveDTC(
                     selectedId,
-                    txtField2.getText(), // code
+                    txtField2.getText(), // dtc
                     txtField4.getText(), // description
                     txtField5.getText(), // resolution
                     txtField3.getText()  // faulty part
@@ -226,6 +226,7 @@ public class SystemConfigController implements Initializable {
         btnSaveChanges.setText("Save New Details");
     }
 
+    // text labels based on table view
     private void setLabels(String l1, String l2, String l3, String l4, String l5) {
         lbl1.setText(l1);
         lbl2.setText(l2);
