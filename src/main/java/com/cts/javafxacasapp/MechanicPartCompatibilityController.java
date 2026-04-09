@@ -191,7 +191,7 @@ public class MechanicPartCompatibilityController {
                                 "Please try the " + partType + "s listed below:\n" +
                                 alternatives);
 
-                AppUtils.showError(lblStatus," PLEASE USE TOOL TO VERIFY COMPATIBILITY OF LISTED PARTS WITH YOUR VEHICLE");
+                lblStatus.setText(" PLEASE USE TOOL TO VERIFY COMPATIBILITY OF LISTED PARTS WITH YOUR VEHICLE");
 
             }
             resultsSection.setVisible(true);
