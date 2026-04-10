@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane prefHeight="750.0" prefWidth="1100.0" style="-fx-background-color: #0f172a;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cts.javafxacasapp.SystemConfigController">
+
+    <!-- Top Navigation Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="25.0" style="-fx-background-color: #1e293b;                      -fx-padding: 20 30;                      -fx-border-color: #ef4444;                      -fx-border-width: 0 0 2 0;">
+
+            <Button onAction="#handleBack" style="-fx-background-color: transparent;                            -fx-text-fill: #94a3b8;                            -fx-border-color: #334155;                            -fx-border-radius: 8;                            -fx-background-radius: 8;                            -fx-padding: 10 20;                            -fx-cursor: hand;                            -fx-font-size: 13px;                            -fx-font-weight: 600;" text="← Back to Dashboard" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <VBox alignment="CENTER" spacing="2">
+                <Label style="-fx-text-fill: #ef4444;                               -fx-font-size: 20px;                               -fx-font-weight: bold;                               -fx-letter-spacing: 2px;" text="System Configuration" />
+                <Label style="-fx-text-fill: #64748b;                               -fx-font-size: 11px;" text="Review and manage ACAS Database Information" />
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS" />
+         <Label fx:id="lblUser" style="-fx-text-fill: #cbd5e1;                           -fx-font-size: 13px;" text="Guest User" />
+         <Label fx:id="lblRole" style="-fx-text-fill: #cbd5e1;                           -fx-font-size: 13px;" text="Role" />
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <HBox spacing="20" style="-fx-background-color: #0f172a; -fx-padding: 30 60;">
+
+            <!-- LEFT: Issue List -->
+            <VBox prefWidth="569.0" spacing="15" style="-fx-background-color: #1e293b;                          -fx-background-radius: 12;                          -fx-padding: 25;                          -fx-border-color: #334155;                          -fx-border-width: 1;                          -fx-border-radius: 12;" HBox.hgrow="SOMETIMES">
+
+                <!-- Filter Row -->
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label style="-fx-text-fill: #ef4444;                                   -fx-font-size: 14px;                                   -fx-font-weight: bold;                                   -fx-letter-spacing: 1.5;" text="ACAS DATABASE " />
+                    <Region HBox.hgrow="ALWAYS" />
+                </HBox>
+
+                <!-- Status Tab Buttons -->
+                <HBox spacing="8">
+                    <Button fx:id="btnFilterDTC" onAction="#handleFilterDTC" style="-fx-background-color: #ef4444;                                    -fx-text-fill: white;                                    -fx-border-radius: 6;                                    -fx-background-radius: 6;                                    -fx-padding: 6 14;                                    -fx-cursor: hand;                                    -fx-font-size: 12px;                                    -fx-font-weight: 600;" text="DTC codes" />
+                    <Button fx:id="btnFilterVehicles" onAction="#handleFilterVehicles" style="-fx-background-color: #1e293b;                                    -fx-text-fill: #94a3b8;                                    -fx-border-color: #334155;                                    -fx-border-radius: 6;                                    -fx-background-radius: 6;                                    -fx-padding: 6 14;                                    -fx-cursor: hand;                                    -fx-font-size: 12px;" text="Vehicles" />
+                </HBox>
+            <ScrollPane VBox.vgrow="ALWAYS">
+               <content>
+      
+                      <!-- Issue Table -->
+                      <TableView fx:id="tblDatabase" minWidth="-Infinity" prefHeight="503.0" prefWidth="425.0" style="-fx-background-color: #0f172a;                                   -fx-border-color: #475569;                                   -fx-border-radius: 8;">
+                          <columns>
+                              <TableColumn fx:id="col1" prefWidth="70" />
+                              <TableColumn fx:id="col2" prefWidth="130" />
+                              <TableColumn fx:id="col3" prefWidth="110" />
+                              <TableColumn fx:id="col4" prefWidth="110" />
+                          </columns>
+                      </TableView>
+               </content>
+            </ScrollPane>
+            </VBox>
+
+            <!-- RIGHT: Issue Detail Panel -->
+            <VBox spacing="20" style="-fx-background-color: #1e293b;                          -fx-background-radius: 12;                          -fx-padding: 25;                          -fx-border-color: #334155;                          -fx-border-width: 1;                          -fx-border-radius: 12;" HBox.hgrow="ALWAYS">
+
+                <Label style="-fx-text-fill: #ef4444;                               -fx-font-size: 14px;                               -fx-font-weight: bold;                               -fx-letter-spacing: 1.5;" text="Record Details" />
+
+                <Separator style="-fx-background-color: #334155;" />
+
+                <!-- Detail Fields -->
+                <GridPane hgap="20" vgap="16">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="160.0" />
+                        <ColumnConstraints hgrow="ALWAYS" />
+                    </columnConstraints>
+
+                    <Label fx:id="lbl1" style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-font-weight: 600;" text="label1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <TextField fx:id="txtField1" editable="false" style="-fx-text-fill: #f59e0b; -fx-font-size: 13px;" GridPane.columnIndex="1" />
+
+                    <Label fx:id="lbl2" style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-font-weight: 600;" text="label2" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <TextField fx:id="txtField2" style="-fx-text-fill: #f59e0b; -fx-font-size: 13px;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label fx:id="lbl3" style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-font-weight: 600;" text="label3" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <TextField fx:id="txtField3" style="-fx-text-fill: #f59e0b; -fx-font-size: 13px;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label fx:id="lbl4" style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-font-weight: 600;" text="label4" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                    <TextField fx:id="txtField4" style="-fx-text-fill: #f59e0b; -fx-font-size: 13px; -fx-font-weight: 600;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+               <TextField fx:id="txtField5" style="-fx-text-fill: #f59e0b; -fx-font-size: 13px; -fx-font-weight: 600;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+               <Label fx:id="lbl5" style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-font-weight: 600;" text="label5" GridPane.rowIndex="4" />
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+
+                <Separator style="-fx-background-color: #334155;" />
+
+                <!-- Issue Description -->
+                <VBox spacing="8" VBox.vgrow="ALWAYS">
+                    <Label fx:id="lblIssueDescription" style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-font-weight: 600;" text="ISSUE DESCRIPTION" visible="false" />
+                    <TextArea fx:id="txtDetailDescription" editable="false" promptText="Insert DTC description here" style="-fx-background-color: #0f172a; -fx-text-fill: #f59e0b; -fx-border-color: #334155; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 13px; -fx-padding: 12;" visible="false" wrapText="true" VBox.vgrow="ALWAYS" />
+                </VBox>
+
+                <!-- Admin Notes -->
+                <VBox spacing="8">
+                    <Label fx:id="lblResolution" style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-font-weight: 600;" text="RESOLUTION" visible="false" />
+                    <TextArea fx:id="txtResolution" prefRowCount="3" promptText="Insert issue resolution details here..." style="-fx-background-color: #0f172a; -fx-text-fill: #f59e0b; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8; -fx-prompt-text-fill: #64748b; -fx-font-size: 13px; -fx-padding: 12;" visible="false" wrapText="true" />
+                </VBox>
+
+                <!-- Action Buttons -->
+                <HBox alignment="CENTER_RIGHT" spacing="12">
+                    <Button onAction="#handleDeleteRecord" style="-fx-background-color: transparent;                                    -fx-text-fill: #60a5fa;                                    -fx-border-color: #3b82f6;                                    -fx-border-width: 2;                                    -fx-border-radius: 8;                                    -fx-background-radius: 8;                                    -fx-padding: 10 20;                                    -fx-cursor: hand;                                    -fx-font-size: 13px;                                    -fx-font-weight: 600;" text="Delete Record" />
+                    <Button fx:id="btnSaveChanges" onAction="#handleSaveChanges" style="-fx-background-color: #ef4444;                                    -fx-text-fill: white;                                    -fx-border-radius: 8;                                    -fx-background-radius: 8;                                    -fx-padding: 10 24;                                    -fx-cursor: hand;                                    -fx-font-size: 13px;                                    -fx-font-weight: 600;" text="Save Changes" />
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+
+    <!-- Bottom Status Bar -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-background-color: #1e293b;                      -fx-padding: 15 30;                      -fx-border-color: #334155;                      -fx-border-width: 1 0 0 0;">
+            <Circle fx:id="statusIndicator" radius="5" style="-fx-fill: #10b981;" />
+            <Label fx:id="lblStatus" style="-fx-text-fill: #cbd5e1;                           -fx-font-size: 12px;                           -fx-font-weight: 500;" text="Select an issue from the list to view details" />
+            <Region HBox.hgrow="ALWAYS" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

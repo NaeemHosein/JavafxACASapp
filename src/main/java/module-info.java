@@ -11,6 +11,8 @@ module com.cts.javafxacasapp {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.desktop;
+    requires org.apache.pdfbox;
 
     opens com.cts.javafxacasapp to javafx.fxml;
     exports com.cts.javafxacasapp;
