@@ -51,3 +51,8 @@ Navigate to Plugins \> javafx \> javafx:run and double-click it.
 
 Please note that if you fail to add the sql connector as a dependency when you run the application you will see an SQLEXCEPTION error: “No suitable driver found for JDBC mysql://local host: 3306/javafxacasapp”. Please follow the steps in Step 3 to add the connector and then proceed to run the application.
 
+# **Demo Accounts**
+For testing purposes the following accounts can be used to access each user role:
+* Role: mechanic   Username: test_mechanic  password: 12345678
+* Role: admin      Username: test_admin     password: 12345678
+* Role: customer   Username: test_owner     password: 12345678
